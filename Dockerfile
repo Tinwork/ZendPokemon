@@ -20,10 +20,7 @@ ADD app/ /data/www
 RUN rm /etc/nginx/sites-enabled/default
 # Create symlink for nginx logs
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
-    && ln -sf /dev/stderr /var/log/nginx/error.log 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
-ENV PATH /root/.composer/vendor/bin:$PATH
+    && ln -sf /dev/stderr /var/log/nginx/error.log
 # Work directory
 WORKDIR /data/www
 # Expose ports
