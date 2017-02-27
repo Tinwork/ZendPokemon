@@ -1,0 +1,9 @@
+/.idea
+app/vendor/
+app/config/development.config.php
+app/data/cache/*
+app/!data/cache/.gitkeep
+app/phpunit.xml
+app/ubuntu-xenial-16.04-cloudimg-console.log
+docker/mysql
+docker/nginx/log
