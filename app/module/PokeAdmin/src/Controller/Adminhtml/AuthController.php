@@ -12,11 +12,14 @@
 namespace PokeAdmin\Controller\Adminhtml;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
 
 class AuthController extends AbstractActionController
 {
-    public function indexAction()
+    public function authAction()
     {
-        return "auth";
+        return new JsonModel([
+            "test" => "test"
+        ]);
     }
 }

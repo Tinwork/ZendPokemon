@@ -15,13 +15,13 @@ use Zend\ServiceManager\Factory\InvokableFactory;
 return [
     'router' => [
         'routes' => [
-            'admin_pokemon_new' => [
+            'admin_auth' => [
                 'type' => Literal::class,
                 'options' => [
-                    'route'    => '/pokemon/new',
+                    'route'    => '/oauth',
                     'defaults' => [
-                        'controller' => Controller\Adminhtml\PokemonController::class,
-                        'action'     => 'new',
+                        'controller' => Controller\Adminhtml\AuthController::class,
+                        'action'     => 'auth',
                     ],
                 ],
             ],
@@ -31,6 +31,12 @@ return [
         'factories' => [
             Controller\Adminhtml\IndexController::class => InvokableFactory::class,
             Controller\Adminhtml\PokemonController::class => InvokableFactory::class,
+            Controller\Adminhtml\AuthController::class => InvokableFactory::class,
         ],
-    ]
+    ],
+    'view_manager' => [
+        'strategies' => [
+            'ViewJsonStrategy',
+        ],
+    ],
 ];
