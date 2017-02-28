@@ -22,7 +22,8 @@
         "psr-4": {
             "Application\\": "module/Application/src/",
             "PokeAdmin\\": "module/PokeAdmin/src/",
-            "PokeApi\\": "module/PokeApi/src/"
+            "PokeApi\\": "module/PokeApi/src/",
+            "TinworkApiConnector\\": "module/TinworkApiConnector/src/"
         }
     },
     "autoload-dev": {

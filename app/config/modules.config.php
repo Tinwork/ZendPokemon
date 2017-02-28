@@ -16,5 +16,6 @@ return [
     'Zend\Validator',
     'Application',
     'PokeAdmin',
-    'PokeApi'
+    'PokeApi',
+    'TinworkApiConnector'
 ];
