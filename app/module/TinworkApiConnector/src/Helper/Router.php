@@ -11,9 +11,30 @@
  */
 namespace TinworkApiConnector\Helper;
 
-class Router 
+use Zend\Mvc\MvcEvent;
+
+class Router
 {
-    public function test() : String {
-        return "yo";
+    /** @var int HTTP_FLAG_UNAUTHORIZED */
+    const HTTP_FLAG_UNAUTHORIZED = 401;
+    /** @var int HTTP_FLAG_FORBIDDEN */
+    const HTTP_FLAG_FORBIDDEN = 403;
+    /** @var int HTTP_FLAG_METHOD_NOT_ALLOWED */
+    const HTTP_FLAG_METHOD_NOT_ALLOWED = 405;
+
+    public function reject(int $code)
+    {
+        return [
+            "code"  => $code,
+            "allowed" => false
+        ];
+    }
+
+    public function forward()
+    {
+        return [
+            "code"  => 200,
+            "allowed" => true
+        ];
     }
 }

@@ -11,10 +11,10 @@
  */
 namespace PokeAdmin\Controller\Adminhtml;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use PokeAdmin\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+class IndexController extends AbstractController
 {
     public function indexAction()
     {

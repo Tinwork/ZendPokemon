@@ -13,4 +13,15 @@ namespace TinworkApiConnector\Helper;
 
 class Http
 {
+    /**
+     * Check if request method is allowed in dispatch event
+     *
+     * @param string $method
+     * @param array $allowedMethods
+     * @return bool
+     */
+    public function validateMethod(string $method, array $allowedMethods) : bool
+    {
+        return in_array($method, $allowedMethods) ? true : false;
+    }
 }

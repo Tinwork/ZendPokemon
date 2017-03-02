@@ -11,16 +11,15 @@
  */
 namespace PokeApi\Controller\Api;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use TinworkApiConnector\Helper\Router;
+use PokeApi\Controller\AbstractController;
+use Zend\View\Model\JsonModel;
 
-class IndexController extends AbstractActionController
+class IndexController extends AbstractController
 {
     public function indexAction()
     {
-        $routerHelper = new Router();
-        var_dump($routerHelper->test());
-
-        die("Bonjour");
+        return new JsonModel([
+            "test" => "test"
+        ]);
     }
 }
