@@ -15,33 +15,58 @@ use Zend\ServiceManager\Factory\InvokableFactory;
 return [
     'router' => [
         'routes' => [
-            'admin_auth' => [
+            'admin' => [
                 'type' => Literal::class,
                 'options' => [
-                    'route'    => '/oauth',
-                    'defaults' => [
-                        'controller' => Controller\Adminhtml\AuthController::class,
-                        'action'     => 'auth',
-                    ],
+                    'route' => '/admin'
                 ],
-            ],
-            'admin_new_pokemon' => [
-                'type' => Literal::class,
-                'options' => [
-                    'route'    => '/pokemons/new',
-                    'defaults' => [
-                        'controller' => Controller\Adminhtml\PokemonController::class,
-                        'action'     => 'new',
+                'child_routes' => [
+                    'oauth' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/oauth',
+                            'defaults' => [
+                                'controller' => Controller\OAuthController::class,
+                                'action' => 'auth'
+                            ]
+                        ]
                     ],
+                    'new' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/new',
+                            'defaults' => [
+                                'controller' => Controller\OAuthController::class,
+                                'action' => 'new'
+                            ]
+                        ]
+                    ],
+                    'pokemon' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/pokemon'
+                        ],
+                        'child_routes' => [
+                            'new' => [
+                                'type' => Literal::class,
+                                'options' => [
+                                    'route' => '/new',
+                                    'defaults' => [
+                                        'controller' => Controller\Api\PokemonController::class,
+                                        'action' => 'new',
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
                 ],
             ],
         ],
     ],
     'controllers' => [
         'factories' => [
-            Controller\Adminhtml\IndexController::class => InvokableFactory::class,
-            Controller\Adminhtml\PokemonController::class => InvokableFactory::class,
-            Controller\Adminhtml\AuthController::class => InvokableFactory::class,
+            'PokeAdmin\Controller\OAuthController'        => 'PokeAdmin\ServiceFactory\OAuthControllerFactory',
+            'PokeAdmin\Controller\Api\PokemonController'  => 'PokeAdmin\ServiceFactory\PokemonControllerFactory'
         ],
     ],
     'view_manager' => [
