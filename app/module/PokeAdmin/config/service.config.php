@@ -16,19 +16,27 @@ use PokeAdmin\Model\Resource\Pokemon;
 use PokeAdmin\Model\Resource\Type;
 use PokeAdmin\Model\Resource\User;
 
-use PokeAdmin\ServiceFactory\OAuthServiceFactory;
-use PokeAdmin\ServiceFactory\PokemonServiceFactory;
+use PokeAdmin\Service\Api\RouterService;
+use PokeAdmin\Service\Api\HttpService;
+
+use PokeAdmin\Factory\OAuthServiceFactory;
+use PokeAdmin\Factory\PokemonServiceFactory;
+use PokeAdmin\Factory\DispatcherServiceFactory;
 
 return [
     'invokables' => [
         'resource.pokemon'  => Pokemon::class,
         'resource.type'     => Type::class,
         'resource.user'     => User::class,
+
+        'service.router'    => RouterService::class,
+        'service.http'      => HttpService::class
     ],
 
     'factories' => [
-        'oauth.service'     => OAuthServiceFactory::class,
-        'pokemon.service'   => PokemonServiceFactory::class
+        'oauth.service'         => OAuthServiceFactory::class,
+        'pokemon.service'       => PokemonServiceFactory::class,
+        'dispatcher.service'    => DispatcherServiceFactory::class
     ],
 
     'initializers' => [

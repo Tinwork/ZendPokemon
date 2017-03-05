@@ -100,4 +100,20 @@ class OAuthService
             $this->config['JWT_ALGORITHM']
         );
     }
+
+    public function validateToken($token)
+    {
+        /** @var string $secretKey */
+        $secretKey = base64_decode($this->config['SECRET_APPLICATION_ID']);
+        try {
+            /** @var array $decodeToken */
+            $decodeToken = JWT::decode($token, $secretKey, [$this->config['JWT_ALGORITHM']]);
+            if ($decodeToken) {
+                return true;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+        return false;
+    }
 }

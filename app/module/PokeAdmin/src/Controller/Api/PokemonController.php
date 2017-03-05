@@ -11,9 +11,11 @@
  */
 namespace PokeAdmin\Controller\Api;
 
+use PokeAdmin\Controller\AbstractController;
 use PokeAdmin\Service\Api\PokemonService;
+use Zend\View\Model\JsonModel;
 
-class PokemonController extends DispatchController
+class PokemonController extends AbstractController
 {
     /** @var PokemonService $service */
     protected $service;
@@ -25,14 +27,13 @@ class PokemonController extends DispatchController
      */
     public function __construct(PokemonService $service)
     {
-        parent::__construct();
-
         $this->service = $service;
     }
 
     public function newAction()
     {
-        var_dump($this->service);
-        die("lol");
+        return new JsonModel([
+            "state" => "OK"
+        ]);
     }
 }

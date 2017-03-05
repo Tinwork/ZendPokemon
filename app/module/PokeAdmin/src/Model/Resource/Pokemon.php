@@ -11,7 +11,17 @@
  */
 namespace PokeAdmin\Model\Resource;
 
-class Pokemon
+use PokeAdmin\Model\Resource\Facade\PokemonInterface;
+use Zend\Db\Adapter\AdapterAwareTrait;
+
+class Pokemon implements PokemonInterface
 {
+    use AdapterAwareTrait;
+
+    /** @var \PokeAdmin\Model\Pokemon $pokemon */
     protected $pokemon;
+
+    public function find()
+    {
+    }
 }

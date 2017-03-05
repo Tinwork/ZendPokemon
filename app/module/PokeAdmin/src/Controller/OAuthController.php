@@ -3,7 +3,7 @@
 /**
  * Class OAuthController
  *
- * @package             PokeAdmin\Controller\Adminhtml
+ * @package             PokeAdmin\Controller
  * @author              Didier Youn <didier.youn@gmail.com>, Marc Intha-Amnouay <marc.inthaamnouay@gmail.com>, Antoine Renault <antoine.renault.mmi@gmail.com>
  * @copyright           Copyright (c) 2017 Tinwork
  * @license             http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -61,6 +61,14 @@ class OAuthController extends AbstractController
 
     public function newAction()
     {
-        die('lol');
+        if (!$this->request->isPost()) {
+            $response = $this->getResponse();
+            $response->setStatusCode(403);
+
+            return $response;
+        }
+        /** @var string $username */
+        $token = $this->request->getPost('token');
+        $this->service->validateToken($token);
     }
 }

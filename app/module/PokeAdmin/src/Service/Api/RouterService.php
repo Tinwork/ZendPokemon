@@ -1,19 +1,17 @@
 <?php
 
 /**
- * Class Router
+ * Class RouterService
  *
- * @package             TinworkApiConnector\Helper
+ * @package             PokeAdmin\Service\Api
  * @author              Didier Youn <didier.youn@gmail.com>, Marc Intha-Amnouay <marc.inthaamnouay@gmail.com>, Antoine Renault <antoine.renault.mmi@gmail.com>
  * @copyright           Copyright (c) 2017 Tinwork
  * @license             http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link                https://github.com/Tinwork/ZendPokemon
  */
-namespace TinworkApiConnector\Helper;
+namespace PokeAdmin\Service\Api;
 
-use Zend\Mvc\MvcEvent;
-
-class Router
+class RouterService
 {
     /** @var int HTTP_FLAG_UNAUTHORIZED */
     const HTTP_FLAG_UNAUTHORIZED = 401;
@@ -30,11 +28,12 @@ class Router
         ];
     }
 
-    public function forward()
+    public function forward(bool $oauth = true)
     {
         return [
-            "code"  => 200,
-            "allowed" => true
+            "code"      => 200,
+            "allowed"   => true,
+            "oauth"     => $oauth
         ];
     }
 }

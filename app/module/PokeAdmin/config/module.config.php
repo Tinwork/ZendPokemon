@@ -10,6 +10,7 @@
 namespace PokeAdmin;
 
 use Zend\Router\Http\Literal;
+use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
@@ -44,16 +45,21 @@ return [
                     'pokemon' => [
                         'type' => Literal::class,
                         'options' => [
-                            'route' => '/pokemon'
+                            'route' => '/pokemons',
+                            'defaults' => [
+                                'controller' => Controller\Api\PokemonController::class,
+                                'action' => 'new',
+                            ]
                         ],
+                        'may_terminate' => true,
                         'child_routes' => [
-                            'new' => [
-                                'type' => Literal::class,
+                            'rest' => [
+                                'type' => Segment::class,
                                 'options' => [
-                                    'route' => '/new',
+                                    'route' => '/[:id]',
                                     'defaults' => [
                                         'controller' => Controller\Api\PokemonController::class,
-                                        'action' => 'new',
+                                        'action' => 'dispatch',
                                     ]
                                 ]
                             ]
@@ -65,8 +71,8 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            'PokeAdmin\Controller\OAuthController'        => 'PokeAdmin\ServiceFactory\OAuthControllerFactory',
-            'PokeAdmin\Controller\Api\PokemonController'  => 'PokeAdmin\ServiceFactory\PokemonControllerFactory'
+            'PokeAdmin\Controller\OAuthController'        => 'PokeAdmin\Factory\OAuthControllerFactory',
+            'PokeAdmin\Controller\Api\PokemonController'  => 'PokeAdmin\Factory\PokemonControllerFactory',
         ],
     ],
     'view_manager' => [

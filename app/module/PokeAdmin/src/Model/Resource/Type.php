@@ -11,6 +11,13 @@
  */
 namespace PokeAdmin\Model\Resource;
 
-class Type
+use PokeAdmin\Model\Resource\Facade\TypeInterface;
+use Zend\Db\Adapter\AdapterAwareTrait;
+
+class Type implements TypeInterface
 {
+    use AdapterAwareTrait;
+
+    /** @var \PokeAdmin\Model\Type $type */
+    protected $type;
 }
