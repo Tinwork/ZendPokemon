@@ -13,15 +13,41 @@ namespace PokeAdmin\Model\Resource;
 
 use PokeAdmin\Model\Resource\Facade\PokemonInterface;
 use Zend\Db\Adapter\AdapterAwareTrait;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Where;
 
 class Pokemon implements PokemonInterface
 {
     use AdapterAwareTrait;
+    /** @var string $table */
+    protected $table = "pokemons";
+    /** @var array $fillables */
+    protected $fillables = ["name", "rank"];
 
-    /** @var \PokeAdmin\Model\Pokemon $pokemon */
-    protected $pokemon;
-
-    public function find()
+    /**
+     * @inheritdoc
+     */
+    public function save(array $data) : bool
     {
+        $sql = new Sql($this->adapter);
+        $insert = $sql->insert($this->table)
+            ->values([
+                'name'  => $data['name'],
+                'rank'  => $data['rank']
+            ]);
+
+        $statement = $sql->prepareStatementForSqlObject($insert);
+        $result = $statement->execute();
+
+        var_dump($result);
+        // Todo finir là
+    }
+
+    /**
+     * @return array
+     */
+    public function getFillables() : array
+    {
+        return $this->fillables;
     }
 }

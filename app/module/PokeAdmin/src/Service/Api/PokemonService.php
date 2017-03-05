@@ -11,12 +11,44 @@
  */
 namespace PokeAdmin\Service\Api;
 
-class PokemonService
+use PokeAdmin\Model\Resource\Pokemon;
+use Zend\Json\Json as Zend_Json;
+
+class PokemonService extends AbstractService
 {
+    /** @var Pokemon $model */
     protected $model;
 
-    public function __construct($resource)
+    /**
+     * PokemonService constructor.
+     *
+     * @param Pokemon $resource
+     */
+    public function __construct(Pokemon $resource)
     {
         $this->model = $resource;
+    }
+
+    /**
+     * Insert pokemon
+     *
+     * @param string $data
+     * @return bool
+     */
+    public function save(string $data) : bool
+    {
+        if (!isset($data)) {
+            return false;
+        }
+        /** @var array $dataToArray */
+        $dataToArray = Zend_Json::decode($data, true);
+        if (!$this->_validFormData($dataToArray['body'], $this->model->getFillables())) {
+            die('Unvalid form data');
+        }
+        if (!$this->model->save($dataToArray['body'])) {
+            die('Can not save form data');
+        }
+
+        return true;
     }
 }

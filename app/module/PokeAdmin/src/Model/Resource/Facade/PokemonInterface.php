@@ -15,5 +15,11 @@ use Application\Repository\RepositoryInterface;
 
 interface PokemonInterface extends RepositoryInterface
 {
-    public function find();
+    /**
+     * Save pokemon in database
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function save(array $data);
 }

@@ -32,6 +32,13 @@ class PokemonController extends AbstractController
 
     public function newAction()
     {
+        /** @var string $data */
+        $data = $this->request->getContent();
+
+        if (!$this->service->save($data)) {
+            return false;
+        }
+
         return new JsonModel([
             "state" => "OK"
         ]);

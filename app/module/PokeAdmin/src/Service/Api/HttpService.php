@@ -42,6 +42,13 @@ class HttpService
         return in_array($routeUriPath, $routesWhiteList) ? true : false;
     }
 
+    /**
+     * Check HTTP method from route request
+     *
+     * @param Request $request
+     * @param array $routesConfig
+     * @return bool
+     */
     public function validHttpMethodFromRoute(Request $request, array $routesConfig)
     {
         /** @var string $routeUriPath */
@@ -60,6 +67,13 @@ class HttpService
         return true;
     }
 
+    /**
+     * Check route request and routes from API configuration
+     *
+     * @param string $requestRoute
+     * @param array $routesConfig
+     * @return bool|null
+     */
     protected function _matchUrl(string $requestRoute, array $routesConfig)
     {
         /** @var null $response */

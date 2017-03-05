@@ -11,9 +11,8 @@
  */
 namespace PokeAdmin\Model\Resource;
 
-use Application\Repository\RepositoryInterface;
-
 use PokeAdmin\Model\Resource\Facade\UserInterface;
+
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
