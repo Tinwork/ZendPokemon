@@ -39,8 +39,8 @@ class Pokemon implements PokemonFacade
         $statement = $sql->prepareStatementForSqlObject($insert);
         $result = $statement->execute();
 
-        var_dump($result);
-        // Todo finir là
+        // TODO : retourner l'id
+        return true;
     }
 
     /**

@@ -32,7 +32,7 @@ class AbstractController extends AbstractActionController
             return $dispatcher->triggerDispatchError($event);
         }
 
-        $this->$restAction();
+        return $this->$restAction();
     }
 
     /**

@@ -13,6 +13,7 @@ namespace Pokemon\PokeAdmin\Controller;
 
 use Pokemon\PokeAdmin\Strategy\PokemonServiceStrategy;
 use Pokemon\Common\Controller\AbstractController;
+use Zend\View\Model\JsonModel;
 
 class RestPokemonController extends AbstractController
 {
