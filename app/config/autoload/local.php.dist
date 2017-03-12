@@ -12,4 +12,19 @@
  */
 
 return [
+    'db' => [
+        'driver'    => 'Pdo',
+        'dsn'       => 'mysql:dbname=app;host=mysql',
+        'username'  => 'root',
+        'password'  => 'admin',
+        'driver_options' => [
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+        ],
+    ],
+    'api' => [
+        'JWT_ALGORITHM'             => 'HS512',
+        'TOKEN_EXPIRED_AT'          => 3600,
+        'SECRET_APPLICATION_ID'     => '41CA66A2EC6951F26FD97623FA71D',
+        'SECRET_APPLICATION_HOST'   => 'local.dev',
+    ]
 ];

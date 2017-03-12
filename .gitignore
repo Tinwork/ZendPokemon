@@ -1,4 +1,5 @@
 /.idea
+app/composer.lock
 app/vendor/
 app/config/development.config.php
 app/data/cache/*
