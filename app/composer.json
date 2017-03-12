@@ -24,9 +24,7 @@
     "autoload": {
         "psr-4": {
             "Application\\": "module/Application/src/",
-            "PokeAdmin\\": "module/PokeAdmin/src/",
-            "PokeApi\\": "module/PokeApi/src/",
-            "TinworkApiConnector\\": "module/TinworkApiConnector/src/"
+            "Pokemon\\": "module/Pokemon/src/"
         }
     },
     "autoload-dev": {

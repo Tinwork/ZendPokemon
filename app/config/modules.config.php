@@ -15,6 +15,5 @@ return [
     'Zend\Router',
     'Zend\Validator',
     'Application',
-    'PokeAdmin',
-    'PokeApi'
+    'Pokemon'
 ];
