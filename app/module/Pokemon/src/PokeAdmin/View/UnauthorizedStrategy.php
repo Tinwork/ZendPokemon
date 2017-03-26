@@ -1,18 +1,19 @@
 <?php
 
 /**
- * Class ${NAME}
+ * Class UnauthorizedStrategy
  *
- * @author              Didier Youn <didier.youn@gmail.com>
- * @copyright           Copyright (c) 2017 DidYoun
+ * @package             Pokemon\PokeAdmin\View
+ * @author              Didier Youn <didier.youn@gmail.com>, Marc Intha-Amnouay <marc.inthaamnouay@gmail.com>, Antoine Renault <antoine.renault.mmi@gmail.com>
+ * @copyright           Copyright (c) 2017 Tinwork
  * @license             http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link                http://www.didier-youn.com
+ * @link                https://github.com/Tinwork/ZendPokemon
  */
 namespace Pokemon\PokeAdmin\View;
 
+use Pokemon\PokeAdmin\Exception\UnAuthorizedException;
 use Pokemon\PokeAdmin\Guard\Route;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
+
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
@@ -74,8 +75,9 @@ class UnauthorizedStrategy
             'identity'   => $event->getParam('identity'),
         );
         switch ($event->getError()) {
-                case Route::ERROR:
+            case Route::ERROR:
                 $viewVariables['route'] = $event->getParam('route');
+                $viewVariables['reason'] = $event->getParam('exception')->getMessage();
                 break;
             case Application::ERROR_EXCEPTION:
                 if (!($event->getParam('exception') instanceof UnAuthorizedException)) {

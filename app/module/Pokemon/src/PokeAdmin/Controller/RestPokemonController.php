@@ -30,12 +30,12 @@ class RestPokemonController extends AbstractController
         $this->strategy = $strategy;
     }
 
-    public function showAction()
+    public function view()
     {
         var_dump('show'); die;
     }
 
-    public function newAction()
+    public function create()
     {
         /** @var string $data */
         $data = $this->request->getContent();
@@ -49,13 +49,26 @@ class RestPokemonController extends AbstractController
         ]);
     }
 
-    public function editAction()
+    public function update()
     {
-        var_dump('edit'); die;
+        /** @var int $pokemonId */
+        $pokemonId = $this->params()->fromRoute('id');
+        var_dump($pokemonId);
+        die;
     }
 
-    public function deleteAction()
+    public function destroy()
     {
-        var_dump('delete'); die;
+        /** @var int $pokemonId */
+        $pokemonId = $this->params()->fromRoute('id');
+        /** @var bool $state */
+        $state = false;
+        if ($this->strategy->delete($pokemonId)) {
+            $state = true;
+        }
+
+        return $this->renderJson([
+            'error' => $state
+        ]);
     }
 }

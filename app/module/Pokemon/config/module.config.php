@@ -36,9 +36,29 @@ return [
             'admin' => [
                 'type' => Literal::class,
                 'options' => [
-                    'route' => '/admin'
+                    'route' => '/admin',
+                    'methods' => ['GET'],
+                    'defaults' => [
+                        'controller' => 'Pokemon\PokeAdmin\Controller\AdminController',
+                        'action' => 'preDispatch'
+                    ]
                 ],
+                'may_terminate' => true,
                 'child_routes' => [
+                    'rest' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/[:id]',
+                            'methods' => ['PUT', 'PATCH', 'DELETE', 'GET'],
+                            'defaults' => [
+                                'controller' => 'Pokemon\PokeAdmin\Controller\AdminController',
+                                'action' => 'preDispatch'
+                            ],
+                            'constraints' => array(
+                                'id' => '[\d]+',
+                            )
+                        ]
+                    ],
                     'oauth' => [
                         'type' => Literal::class,
                         'options' => [
@@ -70,7 +90,10 @@ return [
                                     'defaults' => [
                                         'controller' => 'Pokemon\PokeAdmin\Controller\RestPokemonController',
                                         'action' => 'preDispatch'
-                                    ]
+                                    ],
+                                    'constraints' => array(
+                                        'id' => '[\d]+',
+                                    )
                                 ]
                             ],
                         ]
@@ -92,6 +115,23 @@ return [
                                 'controller' => 'Pokemon\PokeApi\Controller\PokemonController',
                                 'action' => 'show'
                             ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'rest' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/[:id]',
+                                    'methods' => ['GET'],
+                                    'defaults' => [
+                                        'controller' => 'Pokemon\PokeApi\Controller\PokemonController',
+                                        'action' => 'show'
+                                    ],
+                                    'constraints' => array(
+                                        'id' => '[\d]+',
+                                    )
+                                ]
+                            ],
                         ]
                     ]
                 ]
@@ -101,6 +141,7 @@ return [
     'controllers' => [
         'factories' => [
             'Pokemon\PokeAdmin\Controller\OAuthController'          => 'Pokemon\PokeAdmin\Service\OAuthControllerFactory',
+            'Pokemon\PokeAdmin\Controller\AdminController'          => 'Pokemon\PokeAdmin\Service\AdminControllerFactory',
             'Pokemon\PokeAdmin\Controller\RestPokemonController'    => 'Pokemon\PokeAdmin\Service\RestPokemonControllerFactory',
 
             'Pokemon\PokeApi\Controller\PokemonController'          => 'Pokemon\PokeApi\Service\PokemonControllerFactory'

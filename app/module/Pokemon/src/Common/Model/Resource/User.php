@@ -50,4 +50,36 @@ class User implements UserFacade
 
         return false;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function create(array $user) : int
+    {
+        // TODO: Implement create() method.
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function update(int $userId, array $user) : bool
+    {
+        // TODO: Implement update() method.
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function destroy(int $userId) : bool
+    {
+        // TODO: Implement destroy() method.
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function fetchAll() : array
+    {
+
+    }
 }

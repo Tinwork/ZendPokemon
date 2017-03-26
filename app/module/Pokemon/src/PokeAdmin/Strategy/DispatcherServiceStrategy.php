@@ -11,11 +11,12 @@
  */
 namespace Pokemon\PokeAdmin\Strategy;
 
-use Pokemon\PokeAdmin\Exception\UnAuthorizedException;
-use Pokemon\PokeAdmin\Guard\Controller;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Pokemon\PokeAdmin\Exception\UnAuthorizedException;
+use Pokemon\PokeAdmin\Guard\Controller;
 
 class DispatcherServiceStrategy
 {
@@ -25,10 +26,10 @@ class DispatcherServiceStrategy
     protected $config;
     /** @var array REST_ACTIONS */
     const REST_ACTIONS = [
-        'POST'      => 'new',
-        'PUT'       => 'edit',
-        'DELETE'    => 'delete',
-        'GET'       => 'show'
+        'POST'      => 'create',
+        'PUT'       => 'update',
+        'DELETE'    => 'destroy',
+        'GET'       => 'view'
     ];
 
     /**

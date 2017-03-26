@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Class PokemonControllerFactory
+ * Class AdminServiceFactory
  *
- * @package             Pokemon\PokeApi\Service
+ * @package             Pokemon\PokeAdmin\Factory
  * @author              Didier Youn <didier.youn@gmail.com>, Marc Intha-Amnouay <marc.inthaamnouay@gmail.com>, Antoine Renault <antoine.renault.mmi@gmail.com>
  * @copyright           Copyright (c) 2017 Tinwork
  * @license             http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link                https://github.com/Tinwork/ZendPokemon
  */
-namespace Pokemon\PokeApi\Service;
+namespace Pokemon\PokeAdmin\Service;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
@@ -17,9 +17,9 @@ use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
-use Pokemon\PokeApi\Controller\PokemonController;
+use Pokemon\PokeAdmin\Strategy\AdminServiceStrategy;
 
-class PokemonControllerFactory
+class AdminServiceFactory
 {
     /**
      * Create an object
@@ -35,8 +35,9 @@ class PokemonControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $strategy = $container->get('PokeApi\Pokemon');
+        $resource = $container->get('Common\Resource\User');
+        $config = $container->get('Common\Config');
 
-        return new PokemonController($strategy);
+        return new AdminServiceStrategy($resource, $config);
     }
 }

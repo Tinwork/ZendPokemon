@@ -53,6 +53,25 @@ class PokemonServiceStrategy
     }
 
     /**
+     * Delete pokemon by identifier
+     *
+     * @param int $pokemonId
+     * @return bool
+     */
+    public function delete(int $pokemonId) : bool
+    {
+        if (!isset($pokemonId)) {
+            return false;
+        }
+        if ($this->model->delete($pokemonId)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /**
      * Valid form data
      *
      * @param array $form

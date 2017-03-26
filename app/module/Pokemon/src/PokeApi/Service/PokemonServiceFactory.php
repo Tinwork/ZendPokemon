@@ -17,9 +17,9 @@ use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
-use Pokemon\PokeApi\Controller\PokemonController;
+use Pokemon\PokeApi\Strategy\PokemonServiceStrategy;
 
-class PokemonControllerFactory
+class PokemonServiceFactory
 {
     /**
      * Create an object
@@ -35,8 +35,8 @@ class PokemonControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $strategy = $container->get('PokeApi\Pokemon');
+        $resource = $container->get('Common\Resource\Pokemon');
 
-        return new PokemonController($strategy);
+        return new PokemonServiceStrategy($resource);
     }
 }

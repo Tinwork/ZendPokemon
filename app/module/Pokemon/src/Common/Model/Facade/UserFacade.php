@@ -20,7 +20,39 @@ interface UserFacade extends RepositoryInterface
      *
      * @param string $username
      * @param string $password
-     * @return bool
+     * @return array|bool
      */
     public function find(string $username, string $password);
+
+    /**
+     * Create new user
+     *
+     * @param array $user
+     * @return int
+     */
+    public function create(array $user) : int;
+
+    /**
+     * Update user
+     *
+     * @param int $userId
+     * @param array $user
+     * @return bool
+     */
+    public function update(int $userId, array $user) : bool;
+
+    /**
+     * Destroy user
+     *
+     * @param int $userId
+     * @return bool
+     */
+    public function destroy(int $userId) : bool;
+
+    /**
+     * Get collection of administrators
+     *
+     * @return array
+     */
+    public function fetchAll() : array;
 }

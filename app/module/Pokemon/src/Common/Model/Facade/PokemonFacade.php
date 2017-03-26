@@ -16,10 +16,49 @@ use Application\Repository\RepositoryInterface;
 interface PokemonFacade extends RepositoryInterface
 {
     /**
+     * Fetch one or all pokemons
+     *
+     * @param int $pokemonId
+     * @return array
+     */
+    public function fetch(int $pokemonId) : array;
+
+    /**
+     * Fetch one pokemon
+     *
+     * @param int $pokemonId
+     * @return array
+     */
+    public function fetchOne(int $pokemonId) : array;
+
+    /**
+     * Fetch all pokemons
+     *
+     * @return array
+     */
+    public function fetchAll();
+
+    /**
      * Save pokemon in database
      *
      * @param array $data
      * @return bool
      */
-    public function save(array $data);
+    public function save(array $data) : bool;
+
+    /**
+     * Delete pokemon
+     *
+     * @param int $pokemonId
+     * @return bool
+     */
+    public function delete(int $pokemonId) : bool;
+
+    /**
+     * @param int $pokemonId
+     * @param string|null $column
+     * @param array|null $attributes
+     * @return array
+     */
+    public function load(int $pokemonId, string $column = null, array $attributes = null);
 }
