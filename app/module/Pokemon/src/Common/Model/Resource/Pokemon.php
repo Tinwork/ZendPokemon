@@ -32,8 +32,9 @@ class Pokemon implements PokemonFacade
         $sql = new Sql($this->adapter);
         $insert = $sql->insert($this->table)
             ->values([
-                'name'  => $data['name'],
-                'rank'  => $data['rank']
+                'name'          => $data['name'],
+                'rank'          => $data['rank'],
+                'evolutions'    => $data['evolutions']
             ]);
 
         $statement = $sql->prepareStatementForSqlObject($insert);

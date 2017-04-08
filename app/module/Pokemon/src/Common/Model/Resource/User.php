@@ -14,10 +14,12 @@ namespace Pokemon\Common\Model\Resource;
 use Pokemon\Common\Model\Facade\UserFacade;
 
 use Zend\Db\Adapter\AdapterAwareTrait;
+use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
+use Zend\Db\Sql\Delete;
 
-class User implements UserFacade
+class User extends Resource implements UserFacade
 {
     use AdapterAwareTrait;
 
@@ -54,9 +56,19 @@ class User implements UserFacade
     /**
      * @inheritdoc
      */
-    public function create(array $user) : int
+    public function create(array $user) : bool
     {
-        // TODO: Implement create() method.
+        $sql = new Sql($this->adapter);
+        $insert = $sql->insert($this->table);
+        $insert->values([
+            'username'  => $user['pseudo'],
+            'password'  => password_hash($user['password'], PASSWORD_DEFAULT),
+            'roles'     => implode(',', $user['roles'])
+        ]);
+
+        $statement = $sql->prepareStatementForSqlObject($insert);
+
+        return (bool)$statement->execute();
     }
 
     /**
@@ -72,7 +84,26 @@ class User implements UserFacade
      */
     public function destroy(int $userId) : bool
     {
-        // TODO: Implement destroy() method.
+        $sql = new Sql($this->adapter);
+
+        $delete = new Delete();
+        $delete->from($this->table);
+        $delete->where("user_id IN ('SELECT id FROM users WHERE id ='" . $userId. ")");
+
+        $stmt = $sql->prepareStatementForSqlObject($delete);
+        //var_dump($stmt->getSql()); die;
+        $res = (bool)$stmt->execute();
+
+        var_dump($res);
+        die;
+        $where->equalTo('id', $userId);
+
+        $delete = $sql->delete($this->table);
+        $delete->where($where);
+
+        $stmt = $sql->prepareStatementForSqlObject($delete);
+
+        return (bool)$stmt->execute();
     }
 
     /**
@@ -80,6 +111,15 @@ class User implements UserFacade
      */
     public function fetchAll() : array
     {
+        $sql = new Sql($this->adapter);
+        $select = $sql->select($this->table);
+        $select->columns(['*']);
 
+        $stmt = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        $rows = $result->getResource()->fetchAll();
+
+        return $this->render($rows);
     }
 }

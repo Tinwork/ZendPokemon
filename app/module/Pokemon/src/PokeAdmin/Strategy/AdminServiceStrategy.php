@@ -11,6 +11,7 @@
  */
 namespace Pokemon\PokeAdmin\Strategy;
 
+use Zend\Json\Json as Zend_Json;
 use Pokemon\Common\Model\Resource\User;
 
 class AdminServiceStrategy
@@ -33,13 +34,55 @@ class AdminServiceStrategy
     }
 
     /**
+     * Create new administrator
+     *
+     * @param string $data
+     * @return bool
+     */
+    public function createAdmin(string $data) : bool
+    {
+        if (!$data) {
+            return false;
+        }
+        /** @var array $user */
+        $user = Zend_Json::decode($data, true);
+        /** @var bool $queryResult */
+        return $this->model->create($user['body']);
+    }
+
+    /**
+     * Delete admin by id
+     *
+     * @param int $userId
+     * @return bool
+     */
+    public function deleteAdmin(int $userId) : bool
+    {
+        if (!$userId) {
+            return false;
+        }
+
+        return $this->model->destroy($userId);
+    }
+
+    /**
      * Get all admins collection
      *
      * @return array
      */
-    public function getCollection()
+    public function getCollection() : array
     {
-        $collection = $this->model->fetchAll();
-        return ["test"];
+        return $this->model->fetchAll();
+    }
+
+    /**
+     * Get admin details by id
+     *
+     * @param int $userId
+     * @return array
+     */
+    public function getAdmin(int $userId) : array
+    {
+       return $this->model->load($userId);
     }
 }

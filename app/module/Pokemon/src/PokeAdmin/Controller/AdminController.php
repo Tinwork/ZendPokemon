@@ -28,35 +28,76 @@ class AdminController extends AbstractController
         $this->adminService = $service;
     }
 
+    /**
+     * Render all admins
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
     public function show()
     {
-
+        return $this->renderJson([
+            "collection" => $this->adminService->getCollection()
+        ]);
     }
 
+    /**
+     * Render admin by id
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
     public function view()
     {
         /** @var int $userId */
         $userId = $this->params()->fromRoute('id');
-        /** @var array $admins */
-        $admins = $this->adminService->getCollection();
+        if (!isset($userId)) {
+            return $this->show();
+        }
+        /** @var array $admin */
+        $admin = $this->adminService->getAdmin($userId);
 
         return $this->renderJson([
-            "collection" => $admins
+            "collection" => $admin
         ]);
     }
 
+    /**
+     * Create new admin
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
     public function create()
     {
-        die('create');
+        /** @var string $data */
+        $data = $this->request->getContent();
+        /** @var bool $isCreated */
+        $isCreated = $this->adminService->createAdmin($data);
+        return $this->renderJson([
+            "error" => $isCreated
+        ]);
     }
 
+    /**
+     * Update admin by id
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
     public function update()
     {
         die('update');
     }
 
+    /**
+     * Destroy admin by id
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
     public function destroy()
     {
-        die('destroy');
+        /** @var int $userId */
+        $userId = $this->params()->fromRoute('id');
+
+        return $this->renderJson([
+            'error' => $this->adminService->deleteAdmin($userId)
+        ]);
     }
 }
