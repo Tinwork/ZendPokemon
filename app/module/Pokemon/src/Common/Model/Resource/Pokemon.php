@@ -12,11 +12,12 @@
 namespace Pokemon\Common\Model\Resource;
 
 use Pokemon\Common\Model\Facade\PokemonFacade;
+use Pokemon\Common\Model\Resource\Resource;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
 
-class Pokemon implements PokemonFacade
+class Pokemon extends Resource implements PokemonFacade
 {
     use AdapterAwareTrait;
     /** @var string $table */
@@ -40,8 +41,24 @@ class Pokemon implements PokemonFacade
         $statement = $sql->prepareStatementForSqlObject($insert);
         $result = $statement->execute();
 
-        // TODO : retourner l'id
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function update(int $pokemonId, array $data): bool
+    {
+        $sql = new Sql($this->adapter);
+        $update = $sql->update($this->table);
+        $where = new Where();
+        $where->equalTo('id', $pokemonId);
+        $update->set($data, $where);
+
+        $stmt = $sql->prepareStatementForSqlObject($update);
+        $result = $stmt->execute();
+
+        return $result->getAffectedRows() >= 1 ? true : false;
     }
 
     /**
@@ -67,10 +84,10 @@ class Pokemon implements PokemonFacade
     public function fetch(int $pokemonId = null) : array
     {
         if (isset($pokemonId)) {
-            return $this->fetchOne($pokemonId);
+            return $this->render($this->fetchOne($pokemonId));
         }
 
-        return $this->fetchAll();
+        return $this->render($this->fetchAll());
     }
 
     /**

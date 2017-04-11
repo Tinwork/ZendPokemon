@@ -14,6 +14,7 @@ namespace Pokemon\Common\Model\Resource;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
+use Zend\Json\Json as Zend_Json;
 
 class Resource
 {
@@ -56,17 +57,23 @@ class Resource
         foreach ($attributes as $column => $attribute) {
             $where->like($column, '%' . $attribute . '%');
         }
-        $select->columns(['password'])->where($where);
+        $select->columns(['*'])->where($where);
         $stmt = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
 
         return $result->getResource()->fetchAll();
     }
 
-    protected function render($data)
+    /**
+     * Format data before render
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function render($data) : array
     {
-        if (!isset($data)) {
-            return null;
+        if (!$data) {
+            return [];
         }
         /** @var array $result */
         $result = [];
@@ -78,11 +85,26 @@ class Resource
                 if (is_int($key) || !isset($attribute)) {
                     continue;
                 }
+                if ($this->isJson($attribute)) {
+                    $attribute = Zend_Json::decode($attribute, true);
+                }
                 $result[$index][$key] = $attribute;
             }
             $index++;
         }
 
         return $result;
+    }
+
+    /**
+     * Check if attributes is save as JSON
+     *
+     * @param $string
+     * @return bool
+     */
+    private function isJson($string)
+    {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
     }
 }

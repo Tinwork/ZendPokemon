@@ -30,45 +30,59 @@ class RestPokemonController extends AbstractController
         $this->strategy = $strategy;
     }
 
+    /**
+     * Get pokemon details
+     *
+     * @return JsonModel
+     */
     public function view()
     {
         var_dump('show'); die;
     }
 
+    /**
+     * Create pokemon
+     *
+     * @return JsonModel
+     */
     public function create()
     {
         /** @var string $data */
         $data = $this->request->getContent();
+        $response = $this->strategy->save($data);
 
-        if (!$this->strategy->save($data)) {
-            return false;
-        }
-
-        return $this->renderJson([
-            "state" => "OK"
-        ]);
+        return $this->renderJson($response);
     }
 
+    /**
+     * Update pokemon
+     *
+     * @return JsonModel
+     */
     public function update()
     {
         /** @var int $pokemonId */
         $pokemonId = $this->params()->fromRoute('id');
-        var_dump($pokemonId);
-        die;
+        /** @var string $pokemonData */
+        $pokemonData = $this->request->getContent();
+        /** @var array $response */
+        $response = $this->strategy->update($pokemonId, $pokemonData);
+
+        return $this->renderJson($response);
     }
 
+    /**
+     * Delete pokemon
+     *
+     * @return JsonModel
+     */
     public function destroy()
     {
         /** @var int $pokemonId */
         $pokemonId = $this->params()->fromRoute('id');
-        /** @var bool $state */
-        $state = false;
-        if ($this->strategy->delete($pokemonId)) {
-            $state = true;
-        }
+        /** @var array $response */
+        $response = $this->strategy->delete($pokemonId);
 
-        return $this->renderJson([
-            'error' => $state
-        ]);
+        return $this->renderJson($response);
     }
 }

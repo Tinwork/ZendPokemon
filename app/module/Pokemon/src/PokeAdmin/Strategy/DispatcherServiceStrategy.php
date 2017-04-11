@@ -28,6 +28,7 @@ class DispatcherServiceStrategy
     const REST_ACTIONS = [
         'POST'      => 'create',
         'PUT'       => 'update',
+        'PATCH'     => 'update',
         'DELETE'    => 'destroy',
         'GET'       => 'view'
     ];

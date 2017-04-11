@@ -14,8 +14,10 @@ namespace Pokemon\Common\Model\Resource;
 use Pokemon\Common\Model\Facade\UserFacade;
 
 use Zend\Db\Adapter\AdapterAwareTrait;
+use Zend\Db\Sql\Predicate\Expression;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\TableIdentifier;
 use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Delete;
 
@@ -56,7 +58,7 @@ class User extends Resource implements UserFacade
     /**
      * @inheritdoc
      */
-    public function create(array $user) : bool
+    public function create(array $user) : int
     {
         $sql = new Sql($this->adapter);
         $insert = $sql->insert($this->table);
@@ -67,8 +69,10 @@ class User extends Resource implements UserFacade
         ]);
 
         $statement = $sql->prepareStatementForSqlObject($insert);
+        $statement->execute();
 
-        return (bool)$statement->execute();
+        $lastInsert = $this->adapter->getDriver()->getLastGeneratedValue();
+        return $lastInsert;
     }
 
     /**
@@ -81,29 +85,23 @@ class User extends Resource implements UserFacade
 
     /**
      * @inheritdoc
+     *
+     * @sql : "DELETE FROM users WHERE id IN ( SELECT implicitTemp.id from (SELECT id FROM users WHERE id=5) implicitTemp )"
      */
-    public function destroy(int $userId) : bool
+    public function destroy(int $userId) : int
     {
         $sql = new Sql($this->adapter);
 
-        $delete = new Delete();
-        $delete->from($this->table);
-        $delete->where("user_id IN ('SELECT id FROM users WHERE id ='" . $userId. ")");
-
-        $stmt = $sql->prepareStatementForSqlObject($delete);
-        //var_dump($stmt->getSql()); die;
-        $res = (bool)$stmt->execute();
-
-        var_dump($res);
-        die;
+        $where = new Where();
         $where->equalTo('id', $userId);
 
         $delete = $sql->delete($this->table);
         $delete->where($where);
 
         $stmt = $sql->prepareStatementForSqlObject($delete);
+        $res = $stmt->execute();
 
-        return (bool)$stmt->execute();
+        return (int)$res->getAffectedRows();
     }
 
     /**

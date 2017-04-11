@@ -13,8 +13,9 @@ namespace Pokemon\PokeAdmin\Strategy;
 
 use Zend\Json\Json as Zend_Json;
 use Pokemon\Common\Model\Resource\User;
+use Pokemon\Common\Strategy\AbstractRestApiServiceStrategy;
 
-class AdminServiceStrategy
+class AdminServiceStrategy extends AbstractRestApiServiceStrategy
 {
     /** @var User $model */
     protected $model;
@@ -37,32 +38,51 @@ class AdminServiceStrategy
      * Create new administrator
      *
      * @param string $data
-     * @return bool
+     * @return array
      */
-    public function createAdmin(string $data) : bool
+    public function createAdmin(string $data) : array
     {
         if (!$data) {
-            return false;
+            $this->addError('No data');
+            return $this->__r();
         }
         /** @var array $user */
         $user = Zend_Json::decode($data, true);
-        /** @var bool $queryResult */
-        return $this->model->create($user['body']);
+        if (!isset($user['body'])) {
+            $this->addError('Error in body parameters');
+            return $this->__r();
+        }
+        /** @var int $lastInsertId */
+        $lastInsertId = $this->model->create($user['body']);
+
+        return $this->__r([
+            "id" => $lastInsertId
+        ]);
     }
 
     /**
      * Delete admin by id
      *
      * @param int $userId
-     * @return bool
+     * @return array
      */
-    public function deleteAdmin(int $userId) : bool
+    public function deleteAdmin(int $userId) : array
     {
         if (!$userId) {
-            return false;
-        }
+            $this->addError('Non determined id');
 
-        return $this->model->destroy($userId);
+            return $this->__r();
+        }
+        try {
+            /** @var int $affectedRow */
+            $affectedRow = $this->model->destroy($userId);
+            if (!$affectedRow || $affectedRow === 0) {
+                $this->addError(sprintf('L\'admin dont l\'identifiant : %d n\'existe pas', $userId));
+            }
+        } catch (\Exception $e) {
+
+        }
+        return $this->__r();
     }
 
     /**
@@ -72,7 +92,14 @@ class AdminServiceStrategy
      */
     public function getCollection() : array
     {
-        return $this->model->fetchAll();
+        /** @var array $admins */
+        $admins = $this->model->fetchAll();
+        if (!$admins) {
+            $this->addWarning("Don\'t have any admins yet in database");
+        }
+        return $this->__r([
+            'collection' => $admins
+        ]);
     }
 
     /**
@@ -83,6 +110,9 @@ class AdminServiceStrategy
      */
     public function getAdmin(int $userId) : array
     {
-       return $this->model->load($userId);
+        $admin = $this->model->load($userId);
+        return $this->__r([
+           'collection' => $admin
+        ]);
     }
 }

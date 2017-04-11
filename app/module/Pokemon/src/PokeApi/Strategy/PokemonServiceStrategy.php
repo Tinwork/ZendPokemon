@@ -15,12 +15,13 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 
 use Pokemon\Common\Model\Resource\Pokemon;
+use Pokemon\Common\Strategy\AbstractRestApiServiceStrategy;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 use Pokemon\PokeApi\Controller\PokemonController;
 
-class PokemonServiceStrategy
+class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
 {
     /** @var Pokemon $resource */
     protected $resource;
@@ -35,9 +36,16 @@ class PokemonServiceStrategy
         $this->resource = $resource;
     }
 
-
-    public function fetch($pokemonId)
+    /**
+     * Fetch one or all pokemons
+     *
+     * @param int|null $pokemonId
+     * @return array
+     */
+    public function fetch(int $pokemonId = null)
     {
-        return $this->resource->fetch($pokemonId);
+        return $this->__r([
+            'collection' => $this->resource->fetch($pokemonId)
+        ]);
     }
 }

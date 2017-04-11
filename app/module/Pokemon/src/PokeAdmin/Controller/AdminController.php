@@ -35,9 +35,7 @@ class AdminController extends AbstractController
      */
     public function show()
     {
-        return $this->renderJson([
-            "collection" => $this->adminService->getCollection()
-        ]);
+        return $this->renderJson($this->adminService->getCollection());
     }
 
     /**
@@ -52,12 +50,10 @@ class AdminController extends AbstractController
         if (!isset($userId)) {
             return $this->show();
         }
-        /** @var array $admin */
-        $admin = $this->adminService->getAdmin($userId);
+        /** @var array $response */
+        $response = $this->adminService->getAdmin($userId);
 
-        return $this->renderJson([
-            "collection" => $admin
-        ]);
+        return $this->renderJson($response);
     }
 
     /**
@@ -69,11 +65,10 @@ class AdminController extends AbstractController
     {
         /** @var string $data */
         $data = $this->request->getContent();
-        /** @var bool $isCreated */
-        $isCreated = $this->adminService->createAdmin($data);
-        return $this->renderJson([
-            "error" => $isCreated
-        ]);
+        /** @var array $response */
+        $response = $this->adminService->createAdmin($data);
+
+        return $this->renderJson($response);
     }
 
     /**
@@ -95,9 +90,9 @@ class AdminController extends AbstractController
     {
         /** @var int $userId */
         $userId = $this->params()->fromRoute('id');
+        /** @var array $response */
+        $response = $this->adminService->deleteAdmin($userId);
 
-        return $this->renderJson([
-            'error' => $this->adminService->deleteAdmin($userId)
-        ]);
+        return $this->renderJson($response);
     }
 }

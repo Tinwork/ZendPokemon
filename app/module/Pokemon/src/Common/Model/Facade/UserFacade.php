@@ -28,9 +28,9 @@ interface UserFacade extends RepositoryInterface
      * Create new user
      *
      * @param array $user
-     * @return bool
+     * @return int
      */
-    public function create(array $user) : bool;
+    public function create(array $user) : int;
 
     /**
      * Update user
@@ -45,9 +45,9 @@ interface UserFacade extends RepositoryInterface
      * Destroy user
      *
      * @param int $userId
-     * @return bool
+     * @return int
      */
-    public function destroy(int $userId) : bool;
+    public function destroy(int $userId) : int;
 
     /**
      * Get collection of administrators
