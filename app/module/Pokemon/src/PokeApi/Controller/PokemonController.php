@@ -11,15 +11,36 @@
  */
 namespace Pokemon\PokeApi\Controller;
 
-use Zend\View\Model\JsonModel;
-use Pokemon\Common\Controller\RenderController;
+use Pokemon\Common\Controller\AbstractController;
+use Pokemon\PokeApi\Strategy\PokemonServiceStrategy;
 
-class PokemonController extends RenderController
+class PokemonController extends AbstractController
 {
+    /** @var PokemonServiceStrategy*/
+    protected $strategy;
+
+    /**
+     * PokemonController constructor.
+     *
+     * @param PokemonServiceStrategy $strategy
+     */
+    public function __construct(PokemonServiceStrategy $strategy)
+    {
+        $this->strategy = $strategy;
+    }
+
+    /**
+     * Fetch all or fetch one pokemon collection
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
     public function showAction()
     {
+        $pokemonId = $this->params()->fromRoute('id');
+        $collection = $this->strategy->fetch($pokemonId);
+
         return $this->renderJson([
-            'test' => 'test'
+            'collection' => $collection
         ]);
     }
 }

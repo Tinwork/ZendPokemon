@@ -27,7 +27,10 @@ return [
         'PokeAdmin\Guards'          => 'Pokemon\PokeAdmin\Service\GuardServiceFactory',
         'PokeAdmin\Authorize'       => 'Pokemon\PokeAdmin\Service\AuthorizeServiceFactory',
         'PokeAdmin\Pokemon'         => 'Pokemon\PokeAdmin\Service\PokemonServiceFactory',
-        'PokeAdmin\Dispatcher'      => 'Pokemon\PokeAdmin\Service\DispatcherServiceFactory'
+        'PokeAdmin\Dispatcher'      => 'Pokemon\PokeAdmin\Service\DispatcherServiceFactory',
+        'PokeAdmin\Admin'           => 'Pokemon\PokeAdmin\Service\AdminServiceFactory',
+
+        'PokeApi\Pokemon'           => 'Pokemon\PokeApi\Service\PokemonServiceFactory'
     ],
 
     'initializers' => [

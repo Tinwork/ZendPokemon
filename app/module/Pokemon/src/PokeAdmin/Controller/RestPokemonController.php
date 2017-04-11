@@ -30,32 +30,59 @@ class RestPokemonController extends AbstractController
         $this->strategy = $strategy;
     }
 
-    public function showAction()
+    /**
+     * Get pokemon details
+     *
+     * @return JsonModel
+     */
+    public function view()
     {
         var_dump('show'); die;
     }
 
-    public function newAction()
+    /**
+     * Create pokemon
+     *
+     * @return JsonModel
+     */
+    public function create()
     {
         /** @var string $data */
         $data = $this->request->getContent();
+        $response = $this->strategy->save($data);
 
-        if (!$this->strategy->save($data)) {
-            return false;
-        }
-
-        return $this->renderJson([
-            "state" => "OK"
-        ]);
+        return $this->renderJson($response);
     }
 
-    public function editAction()
+    /**
+     * Update pokemon
+     *
+     * @return JsonModel
+     */
+    public function update()
     {
-        var_dump('edit'); die;
+        /** @var int $pokemonId */
+        $pokemonId = $this->params()->fromRoute('id');
+        /** @var string $pokemonData */
+        $pokemonData = $this->request->getContent();
+        /** @var array $response */
+        $response = $this->strategy->update($pokemonId, $pokemonData);
+
+        return $this->renderJson($response);
     }
 
-    public function deleteAction()
+    /**
+     * Delete pokemon
+     *
+     * @return JsonModel
+     */
+    public function destroy()
     {
-        var_dump('delete'); die;
+        /** @var int $pokemonId */
+        $pokemonId = $this->params()->fromRoute('id');
+        /** @var array $response */
+        $response = $this->strategy->delete($pokemonId);
+
+        return $this->renderJson($response);
     }
 }

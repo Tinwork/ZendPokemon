@@ -17,7 +17,7 @@ use Zend\View\Model\JsonModel;
 class AbstractController extends AbstractActionController
 {
     /**
-     *
+     * Pre-dispatch to good actions for REST routes
      */
     public function preDispatchAction()
     {
@@ -27,7 +27,7 @@ class AbstractController extends AbstractActionController
 
         $dispatcher = $sm->get('PokeAdmin\Dispatcher');
 
-        $restAction = $dispatcher->dispatchRoute($event) . 'Action';
+        $restAction = $dispatcher->dispatchRoute($event);
         if (!method_exists($this, $restAction)) {
             return $dispatcher->triggerDispatchError($event);
         }
@@ -44,10 +44,5 @@ class AbstractController extends AbstractActionController
     protected function renderJson(array $params)
     {
         return new JsonModel($params);
-    }
-
-    protected function renderUnauthorizedMethod()
-    {
-
     }
 }

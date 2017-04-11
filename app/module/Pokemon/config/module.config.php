@@ -11,7 +11,6 @@ namespace Pokemon;
 
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'guards' => [
@@ -34,12 +33,62 @@ return [
     ],
     'router' => [
         'routes' => [
+            'pokeroot' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/',
+                    'defaults' => [
+                        'controller' => 'Pokemon\PokeDoc\Controller\IndexController',
+                        'action' => 'index'
+                    ]
+                ],
+            ],
+            'pokedoc' => [
+                    'type' => Literal::class,
+                    'options' => [
+                        'route' => '/api/documentation',
+                        'defaults' => [
+                            'controller' => 'Pokemon\PokeDoc\Controller\IndexController',
+                            'action' => 'doc'
+                        ]
+                    ]
+            ],
+            'pokecontact' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/contact',
+                    'defaults' => [
+                        'controller' => 'Pokemon\PokeDoc\Controller\IndexController',
+                        'action' => 'contact'
+                    ]
+                ]
+            ],
             'admin' => [
                 'type' => Literal::class,
                 'options' => [
-                    'route' => '/admin'
+                    'route' => '/admin',
+                    'methods' => ['GET'],
+                    'defaults' => [
+                        'controller' => 'Pokemon\PokeAdmin\Controller\AdminController',
+                        'action' => 'preDispatch'
+                    ]
                 ],
+                'may_terminate' => true,
                 'child_routes' => [
+                    'rest' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/[:id]',
+                            'methods' => ['PUT', 'PATCH', 'DELETE', 'GET'],
+                            'defaults' => [
+                                'controller' => 'Pokemon\PokeAdmin\Controller\AdminController',
+                                'action' => 'preDispatch'
+                            ],
+                            'constraints' => array(
+                                'id' => '[\d]+',
+                            )
+                        ]
+                    ],
                     'oauth' => [
                         'type' => Literal::class,
                         'options' => [
@@ -71,7 +120,10 @@ return [
                                     'defaults' => [
                                         'controller' => 'Pokemon\PokeAdmin\Controller\RestPokemonController',
                                         'action' => 'preDispatch'
-                                    ]
+                                    ],
+                                    'constraints' => array(
+                                        'id' => '[\d]+',
+                                    )
                                 ]
                             ],
                         ]
@@ -93,6 +145,23 @@ return [
                                 'controller' => 'Pokemon\PokeApi\Controller\PokemonController',
                                 'action' => 'show'
                             ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'rest' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/[:id]',
+                                    'methods' => ['GET'],
+                                    'defaults' => [
+                                        'controller' => 'Pokemon\PokeApi\Controller\PokemonController',
+                                        'action' => 'show'
+                                    ],
+                                    'constraints' => array(
+                                        'id' => '[\d]+',
+                                    )
+                                ]
+                            ],
                         ]
                     ]
                 ]
@@ -102,9 +171,12 @@ return [
     'controllers' => [
         'factories' => [
             'Pokemon\PokeAdmin\Controller\OAuthController'          => 'Pokemon\PokeAdmin\Service\OAuthControllerFactory',
+            'Pokemon\PokeAdmin\Controller\AdminController'          => 'Pokemon\PokeAdmin\Service\AdminControllerFactory',
             'Pokemon\PokeAdmin\Controller\RestPokemonController'    => 'Pokemon\PokeAdmin\Service\RestPokemonControllerFactory',
 
-            'Pokemon\PokeApi\Controller\PokemonController'          => 'Pokemon\PokeApi\Service\PokemonControllerFactory'
+            'Pokemon\PokeApi\Controller\PokemonController'          => 'Pokemon\PokeApi\Service\PokemonControllerFactory',
+
+            'Pokemon\PokeDoc\Controller\IndexController'            => 'Pokemon\PokeDoc\Service\IndexControllerFactory'
         ],
     ],
     'view_manager' => [
@@ -114,7 +186,10 @@ return [
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
         'template_map' => [
+            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
+            'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
+            'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',

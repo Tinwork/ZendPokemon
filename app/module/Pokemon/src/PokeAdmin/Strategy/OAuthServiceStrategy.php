@@ -66,13 +66,15 @@ class OAuthServiceStrategy
         if (!isset($username) || !isset($password)) {
             return false;
         }
-        /** @var User $user */
-        $user = $this->model->find($username, $password);
-        if (!$user) {
+        /** @var array $hash */
+        $hash = $this->model->loadByAttribute("hash", [
+            'username' => $username
+        ]);
+        $hash = $hash[0]["password"];
+        if (!password_verify($password, $hash)) {
             return false;
         }
-
-        return $user;
+        return true;
     }
 
     /**
