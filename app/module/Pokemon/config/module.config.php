@@ -127,6 +127,34 @@ return [
                                 ]
                             ],
                         ]
+                    ],
+                    'types' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/types',
+                            'methods' => ['GET', 'POST'],
+                            'defaults' => [
+                                'controller' => 'Pokemon\PokeAdmin\Controller\TypeController',
+                                'action' => 'preDispatch'
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'rest' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/[:id]',
+                                    'methods' => ['PUT', 'PATCH', 'DELETE', 'GET'],
+                                    'defaults' => [
+                                        'controller' => 'Pokemon\PokeAdmin\Controller\TypeController',
+                                        'action' => 'preDispatch'
+                                    ],
+                                    'constraints' => array(
+                                        'id' => '[\d]+',
+                                    )
+                                ]
+                            ],
+                        ]
                     ]
                 ]
             ],
@@ -172,6 +200,7 @@ return [
         'factories' => [
             'Pokemon\PokeAdmin\Controller\OAuthController'          => 'Pokemon\PokeAdmin\Service\OAuthControllerFactory',
             'Pokemon\PokeAdmin\Controller\AdminController'          => 'Pokemon\PokeAdmin\Service\AdminControllerFactory',
+            'Pokemon\PokeAdmin\Controller\TypeController'           => 'Pokemon\PokeAdmin\Service\TypeControllerFactory',
             'Pokemon\PokeAdmin\Controller\RestPokemonController'    => 'Pokemon\PokeAdmin\Service\RestPokemonControllerFactory',
 
             'Pokemon\PokeApi\Controller\PokemonController'          => 'Pokemon\PokeApi\Service\PokemonControllerFactory',
