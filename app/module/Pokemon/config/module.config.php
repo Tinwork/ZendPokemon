@@ -127,6 +127,34 @@ return [
                                 ]
                             ],
                         ]
+                    ],
+                    'types' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/types',
+                            'methods' => ['GET', 'POST'],
+                            'defaults' => [
+                                'controller' => 'Pokemon\PokeAdmin\Controller\TypeController',
+                                'action' => 'preDispatch'
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'rest' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/[:id]',
+                                    'methods' => ['PUT', 'PATCH', 'DELETE', 'GET'],
+                                    'defaults' => [
+                                        'controller' => 'Pokemon\PokeAdmin\Controller\TypeController',
+                                        'action' => 'preDispatch'
+                                    ],
+                                    'constraints' => array(
+                                        'id' => '[\d]+',
+                                    )
+                                ]
+                            ],
+                        ]
                     ]
                 ]
             ],
@@ -163,6 +191,58 @@ return [
                                 ]
                             ],
                         ]
+                    ],
+                    'types' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/types',
+                            'methods' => ['GET'],
+                            'defaults' => [
+                                'controller' => 'Pokemon\PokeApi\Controller\TypeController',
+                                'action' => 'show'
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'rest' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/[:id]',
+                                    'methods' => ['GET'],
+                                    'defaults' => [
+                                        'controller' => 'Pokemon\PokeApi\Controller\TypeController',
+                                        'action' => 'show'
+                                    ],
+                                    'constraints' => array(
+                                        'id' => '[\d]+',
+                                    )
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'pokemons' => [
+                                        'type' => Literal::class,
+                                        'options' => [
+                                            'route' => '/pokemons',
+                                            'defaults' => [
+                                                'controller' => 'Pokemon\PokeApi\Controller\TypeController',
+                                                'action' => 'getPokemon'
+                                            ]
+                                        ]
+                                    ],
+                                ]
+                            ],
+                        ]
+                    ],
+                    'geo' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/geo',
+                            'methods' => ['GET'],
+                            'defaults' => [
+                                'controller' => 'Pokemon\PokeApi\Controller\GeoController',
+                                'action' => 'show'
+                            ]
+                        ],
                     ]
                 ]
             ]
@@ -172,9 +252,12 @@ return [
         'factories' => [
             'Pokemon\PokeAdmin\Controller\OAuthController'          => 'Pokemon\PokeAdmin\Service\OAuthControllerFactory',
             'Pokemon\PokeAdmin\Controller\AdminController'          => 'Pokemon\PokeAdmin\Service\AdminControllerFactory',
+            'Pokemon\PokeAdmin\Controller\TypeController'           => 'Pokemon\PokeAdmin\Service\TypeControllerFactory',
             'Pokemon\PokeAdmin\Controller\RestPokemonController'    => 'Pokemon\PokeAdmin\Service\RestPokemonControllerFactory',
 
             'Pokemon\PokeApi\Controller\PokemonController'          => 'Pokemon\PokeApi\Service\PokemonControllerFactory',
+            'Pokemon\PokeApi\Controller\TypeController'             => 'Pokemon\PokeApi\Service\TypeControllerFactory',
+            'Pokemon\PokeApi\Controller\GeoController'              => 'Pokemon\PokeApi\Service\GeoControllerFactory',
 
             'Pokemon\PokeDoc\Controller\IndexController'            => 'Pokemon\PokeDoc\Service\IndexControllerFactory'
         ],
