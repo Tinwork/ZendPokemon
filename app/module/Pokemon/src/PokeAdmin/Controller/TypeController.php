@@ -55,7 +55,12 @@ class TypeController extends AbstractController
      */
     public function create()
     {
-        die('create');
+        /** @var string $data */
+        $data = $this->request->getContent();
+        /** @var array $response */
+        $response = $this->typeService->save($data);
+
+        return $this->renderJson($response);
     }
 
     /**

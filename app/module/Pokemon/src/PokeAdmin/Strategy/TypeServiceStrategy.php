@@ -31,4 +31,45 @@ class TypeServiceStrategy extends AbstractRestApiServiceStrategy
     {
         $this->model = $resource;
     }
+
+    /**
+     * Save new type in database
+     *
+     * @param string $data
+     * @return array
+     */
+    public function save(string $data) : array
+    {
+        /** @var bool|array $data */
+        $data = $this->format($data);
+        if (!$data) {
+            $this->addError("Trouble in POST data");
+            return $this->__r();
+        }
+        var_dump($data); die;
+        return [];
+    }
+
+    /**
+     * Update type by identifier
+     *
+     * @param int $typeId
+     * @param string $data
+     * @return array
+     */
+    public function update(int $typeId, string $data) : array
+    {
+        return [];
+    }
+
+    /**
+     * Delete type by identifier
+     *
+     * @param int $typeId
+     * @return array
+     */
+    public function delete(int $typeId) : array
+    {
+        return [];
+    }
 }

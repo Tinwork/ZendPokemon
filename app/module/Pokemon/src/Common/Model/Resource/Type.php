@@ -18,4 +18,46 @@ use Zend\Db\Adapter\AdapterAwareTrait;
 class Type implements TypeFacade
 {
     use AdapterAwareTrait;
+
+    /**
+     * @inheritDoc
+     */
+    public function fetch(int $typeId): array
+    {
+        // TODO: Implement fetch() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchOne(int $typeId): array
+    {
+        // TODO: Implement fetchOne() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchAll()
+    {
+        // TODO: Implement fetchAll() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function save(array $data): bool
+    {
+        // TODO: Implement save() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function update(int $typeId, array $data): bool
+    {
+        // TODO: Implement update() method.
+    }
+
+
 }

@@ -19,7 +19,8 @@
         "zendframework/zend-db": "^2.8",
         "zendframework/zend-json": "^3.0",
         "zendframework/zend-debug": "^2.5",
-        "firebase/php-jwt": "^4.0"
+        "firebase/php-jwt": "^4.0",
+        "zendframework/zend-form": "^2.10"
     },
     "autoload": {
         "psr-4": {

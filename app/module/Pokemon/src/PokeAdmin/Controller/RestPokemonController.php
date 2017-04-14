@@ -11,6 +11,9 @@
  */
 namespace Pokemon\PokeAdmin\Controller;
 
+use Pokemon\Common\Model\Entity\Pokemon;
+use Pokemon\PokeAdmin\Builder\Form\PokemonType;
+use Pokemon\PokeAdmin\Builder\Validator\PokemonFormValidator;
 use Pokemon\PokeAdmin\Strategy\PokemonServiceStrategy;
 use Pokemon\Common\Controller\AbstractController;
 use Zend\View\Model\JsonModel;
@@ -49,6 +52,24 @@ class RestPokemonController extends AbstractController
     {
         /** @var string $data */
         $data = $this->request->getContent();
+        /** @var PokemonType $pokemonFormType */
+        $pokemonFormType = new PokemonType();
+        $pokemonFormType->setInputFilter(new PokemonFormValidator());
+
+        $pokemonFormType->setData([
+            "name" => null,
+            "type_id" => 1,
+            "rank" => 34,
+            "evolutions" => "lol"
+        ]);
+
+        if ($pokemonFormType->isValid()) {
+            var_dump("test");
+        } else {
+            var_dump("yo");
+        }
+        die;
+
         $response = $this->strategy->save($data);
 
         return $this->renderJson($response);

@@ -31,7 +31,9 @@ return [
         'PokeAdmin\Admin'           => 'Pokemon\PokeAdmin\Service\AdminServiceFactory',
         'PokeAdmin\Type'            => 'Pokemon\PokeAdmin\Service\TypeServiceFactory',
 
-        'PokeApi\Pokemon'           => 'Pokemon\PokeApi\Service\PokemonServiceFactory'
+        'PokeApi\Pokemon'           => 'Pokemon\PokeApi\Service\PokemonServiceFactory',
+        'PokeApi\Type'              => 'Pokemon\PokeApi\Service\TypeServiceFactory',
+        'PokeApi\Geo'               => 'Pokemon\PokeApi\Service\GeoServiceFactory'
     ],
 
     'initializers' => [

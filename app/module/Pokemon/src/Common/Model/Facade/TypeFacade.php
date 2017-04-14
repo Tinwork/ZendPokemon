@@ -15,5 +15,43 @@ use Application\Repository\RepositoryInterface;
 
 interface TypeFacade extends RepositoryInterface
 {
+    /**
+     * Fetch one or all type
+     *
+     * @param int $typeId
+     * @return array
+     */
+    public function fetch(int $typeId) : array;
 
+    /**
+     * Fetch one type
+     *
+     * @param int $typeId
+     * @return array
+     */
+    public function fetchOne(int $typeId) : array;
+
+    /**
+     * Fetch all types
+     *
+     * @return array
+     */
+    public function fetchAll();
+
+    /**
+     * Save type in database
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function save(array $data) : bool;
+
+    /**
+     * Update type by id
+     *
+     * @param int $typeId
+     * @param array $data
+     * @return bool
+     */
+    public function update(int $typeId, array $data) : bool;
 }

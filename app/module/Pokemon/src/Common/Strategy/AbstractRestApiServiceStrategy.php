@@ -11,6 +11,8 @@
  */
 namespace Pokemon\Common\Strategy;
 
+use Zend\Json\Json as Zend_Json;
+
 class AbstractRestApiServiceStrategy
 {
     /** @var string FLAG_SUCCESS */
@@ -51,6 +53,40 @@ class AbstractRestApiServiceStrategy
         }
 
         return $return;
+    }
+
+    /**
+     * Encode data to JSON
+     *
+     * @param string $data
+     */
+    protected function jsonEncode(string $data)
+    {
+
+    }
+
+    /**
+     * Format POST data
+     *
+     * @param string $data
+     * @return array|bool
+     */
+    protected function format(string $data)
+    {
+        if (!$data) {
+            return false;
+        }
+        try {
+            $dataToArray = Zend_Json::decode($data, true);
+            if (!isset($dataToArray['body'])) {
+                $this->addError('The format of BODY data is misconfigured');
+                return false;
+            }
+            return $dataToArray['body'];
+        } catch (\Exception $e) {
+            $this->addError($e->getMessage());
+            return false;
+        }
     }
 
     /**
