@@ -36,7 +36,10 @@ class PokemonFormValidator extends InputFilter
         $stringLength->setMin(5);
         $stringLength->setMax(50);
 
-        return $stringLength;
+        $validatorChain = new ValidatorChain();
+        $validatorChain->attach($stringLength);
+
+        return $validatorChain;
     }
 
     protected function getStringTrimFilterChain()
