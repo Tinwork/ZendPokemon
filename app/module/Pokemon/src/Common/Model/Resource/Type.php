@@ -12,12 +12,20 @@
 namespace Pokemon\Common\Model\Resource;
 
 use Pokemon\Common\Model\Facade\TypeFacade;
-
+use Pokemon\Common\Model\Resource\Resource;
 use Zend\Db\Adapter\AdapterAwareTrait;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Where;
 
 class Type implements TypeFacade
 {
     use AdapterAwareTrait;
+    /** @var string $table */
+    protected $table = "types";
+    /** @var array $fillables */
+    protected $fillables = ["name"];
+    /** @var array $uniques */
+    protected $uniques = ["name"];
 
     /**
      * @inheritDoc
@@ -46,9 +54,25 @@ class Type implements TypeFacade
     /**
      * @inheritDoc
      */
-    public function save(array $data): bool
+    public function save(array $data) : array
     {
-        // TODO: Implement save() method.
+        try {
+            $sql = new Sql($this->adapter);
+            $insert = $sql->insert($this->table)
+                ->values([
+                    'label' => $data['name']
+                ]);
+            $statement = $sql->prepareStatementForSqlObject($insert);
+            $result = $statement->execute();
+        } catch (\Exception $e) {
+            return [
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return [
+            "value" => (string)$result->getGeneratedValue()
+        ];
     }
 
     /**
@@ -59,5 +83,22 @@ class Type implements TypeFacade
         // TODO: Implement update() method.
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function delete(int $typeId): bool
+    {
+        $sql = new Sql($this->adapter);
 
+        $where = new Where();
+        $where->equalTo('id', $typeId);
+
+        $delete = $sql->delete($this->table);
+        $delete->where($where);
+
+        $stmt = $sql->prepareStatementForSqlObject($delete);
+        $res = $stmt->execute();
+
+        return (int)$res->getAffectedRows() == 1 ? true : false;
+    }
 }

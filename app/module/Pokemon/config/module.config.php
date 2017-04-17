@@ -243,6 +243,35 @@ return [
                                 'action' => 'show'
                             ]
                         ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'geo_pokemon' => [
+                                'type' => Literal::class,
+                                'options' => [
+                                    'route' => '/pokemons',
+                                    'defaults' => [
+                                        'controller' => 'Pokemon\PokeApi\Controller\GeoController',
+                                        'action' => 'localisation'
+                                    ]
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'geo_pokemon_details' => [
+                                        'type' => Segment::class,
+                                        'options' => [
+                                            'route' => '/[:id]',
+                                            'defaults' => [
+                                                'controller' => 'Pokemon\PokeApi\Controller\GeoController',
+                                                'action' => 'localisation'
+                                            ],
+                                            'constraints' => array(
+                                                'id' => '[\d]+',
+                                            )
+                                        ]
+                                    ],
+                                ]
+                            ],
+                        ]
                     ]
                 ]
             ]

@@ -46,8 +46,10 @@ class TypeServiceStrategy extends AbstractRestApiServiceStrategy
             $this->addError("Trouble in POST data");
             return $this->__r();
         }
-        var_dump($data); die;
-        return [];
+        /** @var array $response */
+        $response = $this->model->save($data);
+
+        return $this->__r($response);
     }
 
     /**
@@ -70,6 +72,18 @@ class TypeServiceStrategy extends AbstractRestApiServiceStrategy
      */
     public function delete(int $typeId) : array
     {
-        return [];
+        if (!$typeId) {
+            $this->addError('No type ID');
+            return $this->__r();
+        }
+        /** @var bool $response */
+        $response = $this->model->delete($typeId);
+        if (!$response) {
+            return $this->__r([
+                "error" => sprintf("No row for this type ID : %d", $typeId)
+            ]);
+        }
+
+        return $this->__r();
     }
 }

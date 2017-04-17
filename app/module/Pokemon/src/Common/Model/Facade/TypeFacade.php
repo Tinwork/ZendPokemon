@@ -42,9 +42,10 @@ interface TypeFacade extends RepositoryInterface
      * Save type in database
      *
      * @param array $data
-     * @return bool
+     * @return array
+     * @throws \Exception
      */
-    public function save(array $data) : bool;
+    public function save(array $data) : array;
 
     /**
      * Update type by id
@@ -54,4 +55,12 @@ interface TypeFacade extends RepositoryInterface
      * @return bool
      */
     public function update(int $typeId, array $data) : bool;
+
+    /**
+     * Delete type by id
+     *
+     * @param int $typeId
+     * @return bool
+     */
+    public function delete(int $typeId) : bool;
 }

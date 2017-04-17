@@ -28,4 +28,11 @@ class GeoController extends AbstractController
     {
         $this->strategy = $strategy;
     }
+
+    public function localisationAction()
+    {
+        $pokemonId = $this->params()->fromRoute('id');
+        var_dump($pokemonId);
+        die('yo');
+    }
 }

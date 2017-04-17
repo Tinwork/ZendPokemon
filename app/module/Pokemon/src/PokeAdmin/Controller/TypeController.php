@@ -80,6 +80,11 @@ class TypeController extends AbstractController
      */
     public function destroy()
     {
-        die('destroy');
+        /** @var int $typeId */
+        $typeId = $this->params()->fromRoute('id');
+        /** @var array $response */
+        $response = $this->typeService->delete($typeId);
+
+        return $this->renderJson($response);
     }
 }
