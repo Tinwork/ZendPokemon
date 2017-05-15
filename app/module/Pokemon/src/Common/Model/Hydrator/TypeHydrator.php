@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class PokemonHydrator
+ * Class TypeHydrator
  *
  * @package             Pokemon\Common\Model\Hydrator
  * @author              Didier Youn <didier.youn@gmail.com>, Marc Intha-Amnouay <marc.inthaamnouay@gmail.com>, Antoine Renault <antoine.renault.mmi@gmail.com>
@@ -11,17 +11,17 @@
  */
 namespace Pokemon\Common\Model\Hydrator;
 
-use Pokemon\Common\Model\Entity\Pokemon;
+use Pokemon\Common\Model\Entity\Type;
 use Zend\Hydrator\HydratorInterface;
 
-class PokemonHydrator implements HydratorInterface
+class TypeHydrator implements HydratorInterface
 {
     /**
      * @inheritdoc
      */
     public function extract($object)
     {
-        if (!$object instanceof Pokemon) {
+        if (!$object instanceof Type) {
             return [];
         }
 
@@ -35,11 +35,9 @@ class PokemonHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        if (!$object instanceof Pokemon) {
+        if (!$object instanceof Type) {
             return $object;
         }
-
-        $object->setName(isset($data['name']) ? (string)($data['name']) : null);
 
         return $object;
     }

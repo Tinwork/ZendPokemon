@@ -50,31 +50,19 @@ class RestPokemonController extends AbstractController
      */
     public function create()
     {
-        $pokemon = new Pokemon();
+        /** @var null $response */
+        $response = null;
         /** @var string $data */
         $data = $this->request->getContent();
         /** @var PokemonType $pokemonFormType */
         $pokemonFormType = new PokemonType();
+        $pokemon = new Pokemon();
         $pokemonFormType->bind($pokemon);
-
         $pokemonFormType->setInputFilter(new PokemonFormValidator());
-        $pokemonFormType->setData([
-            "name" => null,
-            "type_id" => 1,
-            "rank" => 34,
-            "evolutions" => "lol"
-        ]);
-
-        var_dump($pokemon); die;
-
+        $pokemonFormType->setData($this->extractData($data));
         if ($pokemonFormType->isValid()) {
-            var_dump("test");
-        } else {
-            var_dump("yo");
+            $response = $this->strategy->save($data);
         }
-        die;
-
-        $response = $this->strategy->save($data);
 
         return $this->renderJson($response);
     }

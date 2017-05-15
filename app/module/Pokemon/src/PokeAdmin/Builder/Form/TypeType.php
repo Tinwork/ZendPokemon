@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class PokemonType
+ * Class TypeType
  *
  * @package             Pokemon\PokeAdmin\Builder\Form
  * @author              Didier Youn <didier.youn@gmail.com>, Marc Intha-Amnouay <marc.inthaamnouay@gmail.com>, Antoine Renault <antoine.renault.mmi@gmail.com>
@@ -11,28 +11,18 @@
  */
 namespace Pokemon\PokeAdmin\Builder\Form;
 
-use Pokemon\Common\Model\Hydrator\PokemonHydrator;
+use Pokemon\Common\Model\Hydrator\TypeHydrator;
 use Zend\Form\Form;
 use Zend\Form\Element;
 
-class PokemonType extends Form
+class TypeType extends Form
 {
     public function __construct()
     {
-        parent::__construct('pokemon_form_add');
+        parent::__construct('type_form_add');
 
-        $this->setHydrator(new PokemonHydrator());
+        $this->setHydrator(new TypeHydrator());
 
-        $name = new Element\Text('name');
-        $type = new Element\Text('type_id');
-        $rank = new Element\Text('rank');
-        $evolutions = new Element\Textarea('evolutions');
-        $submit = new Element\Submit('submit');
-
-        $this->add($name);
-        $this->add($type);
-        $this->add($rank);
-        $this->add($evolutions);
-        $this->add($submit);
+        // TODO
     }
 }
