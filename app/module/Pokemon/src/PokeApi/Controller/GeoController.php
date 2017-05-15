@@ -29,10 +29,18 @@ class GeoController extends AbstractController
         $this->strategy = $strategy;
     }
 
+    /**
+     * Add new localisation
+     */
     public function localisationAction()
     {
+        /** @var int $pokemonId */
         $pokemonId = $this->params()->fromRoute('id');
-        var_dump($pokemonId);
-        die('yo');
+        /** @var string $data */
+        $data = $this->request->getContent();
+        /** @var array $response */
+        $response = $this->strategy->savePosition($pokemonId, $data);
+
+        return $this->renderJson($response);
     }
 }
