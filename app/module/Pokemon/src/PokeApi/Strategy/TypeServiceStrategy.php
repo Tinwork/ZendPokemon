@@ -35,4 +35,32 @@ class TypeServiceStrategy extends AbstractRestApiServiceStrategy
     {
         $this->resource = $resource;
     }
+
+    /**
+     * Fetch one or all types
+     *
+     * @param int|null $typeId
+     * @return array
+     */
+    public function fetch(int $typeId = null) : array
+    {
+        return $this->__r([
+            'types' => $this->resource->fetch($typeId)
+        ]);
+    }
+
+    /**
+     * Fetch pokemons by types
+     *
+     * @param int $typeId
+     * @param array|null $queries
+     * @return array
+     */
+    public  function fetchPokemonsByType(int $typeId, array $queries = null) : array
+    {
+        return $this->__r([
+            'type' => $this->resource->load($typeId),
+            'pokemons' => $this->resource->fetchPokemonsByType($typeId, $queries)
+        ]);
+    }
 }

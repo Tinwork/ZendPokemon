@@ -22,6 +22,7 @@ return [
 
     'factories' => [
         'Common\Config'             => 'Pokemon\Common\Service\ConfigServiceFactory',
+        'Common\Upload'             => 'Pokemon\Common\Service\UploadServiceFactory',
 
         'PokeAdmin\OAuth'           => 'Pokemon\PokeAdmin\Service\OAuthServiceFactory',
         'PokeAdmin\Unauthorized'    => 'Pokemon\PokeAdmin\Service\UnauthorizedStrategyServiceFactory',

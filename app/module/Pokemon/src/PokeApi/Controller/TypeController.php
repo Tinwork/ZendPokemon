@@ -31,17 +31,25 @@ class TypeController extends AbstractController
 
     public function showAction()
     {
-        die('lol');
+        $typeId = $this->params()->fromRoute('id');
+        $collection = $this->strategy->fetch($typeId);
+
+        return $this->renderJson([
+            'collection' => $collection
+        ]);
     }
 
     public function getPokemonAction()
     {
         $queryParams = $this->getRequest()->getQuery('query');
         $queryParams = explode(',', $queryParams);
+        $typeId = $this->params()->fromRoute('id');
 
-        var_dump($queryParams); die;
+        $collection = $this->strategy->fetchPokemonsByType($typeId, $queryParams);
 
-        die('POKEMOOONS');
+        return $this->renderJson([
+            'collection' => $collection
+        ]);
     }
 
 }

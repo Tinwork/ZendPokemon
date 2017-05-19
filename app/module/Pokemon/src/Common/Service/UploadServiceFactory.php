@@ -1,25 +1,24 @@
 <?php
 
 /**
- * Class RestPokemonControllerFactory
+ * Class UploadServiceFactory
  *
- * @package             Pokemon\PokeAdmin\Service
+ * @package             Pokemon\Common\Service
  * @author              Didier Youn <didier.youn@gmail.com>, Marc Intha-Amnouay <marc.inthaamnouay@gmail.com>, Antoine Renault <antoine.renault.mmi@gmail.com>
  * @copyright           Copyright (c) 2017 Tinwork
  * @license             http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link                https://github.com/Tinwork/ZendPokemon
  */
-namespace Pokemon\PokeAdmin\Service;
+namespace Pokemon\Common\Service;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 
+use Pokemon\Common\Strategy\UploadServiceStrategy;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
-use Pokemon\PokeAdmin\Controller\RestPokemonController;
-
-class RestPokemonControllerFactory
+class UploadServiceFactory
 {
     /**
      * Create an object
@@ -35,9 +34,6 @@ class RestPokemonControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $strategy = $container->get('PokeAdmin\Pokemon');
-        $upload = $container->get('Common\Upload');
-
-        return new RestPokemonController($strategy, $upload);
+        return new UploadServiceStrategy();
     }
 }

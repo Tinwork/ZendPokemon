@@ -42,9 +42,10 @@ interface PokemonFacade extends RepositoryInterface
      * Save pokemon in database
      *
      * @param array $data
+     * @param string $path
      * @return bool
      */
-    public function save(array $data) : bool;
+    public function save(array $data, string $path) : bool;
 
     /**
      * Update pokemon by id
@@ -62,12 +63,4 @@ interface PokemonFacade extends RepositoryInterface
      * @return bool
      */
     public function delete(int $pokemonId) : bool;
-
-    /**
-     * @param int $pokemonId
-     * @param string|null $column
-     * @param array|null $attributes
-     * @return array
-     */
-    public function load(int $pokemonId, string $column = null, array $attributes = null);
 }

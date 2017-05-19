@@ -35,9 +35,10 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
      * Insert pokemon
      *
      * @param string $data
+     * @param string $path
      * @return array
      */
-    public function save(string $data)
+    public function save(string $data, string $path = null)
     {
         if (!$data) {
             $this->addError('No data');
@@ -49,14 +50,13 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
             $this->addError('Body data parameters are not correct');
             return $this->__r();
         }
-        if ($this->alreadyExist($dataToArray['body'])) {
-            $this->addError(sprintf('The pokemon with name : %s already exist', $dataToArray['body']['name']));
+        if ($this->verifyUniquesAttributes($this->model->getUniques(), $this->model, $dataToArray['body'])) {
             return $this->__r();
         }
         if (isset($dataToArray['body']['evolutions'])) {
             $dataToArray['body']['evolutions'] = $this->prepareEvolutions($dataToArray['body']['evolutions']);
         }
-        if (!$this->model->save($dataToArray['body'])) {
+        if (!$this->model->save($dataToArray['body'], $path)) {
             $this->addError('Can\'t save the pokemon in database');
         }
 
@@ -136,28 +136,5 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
         }
 
         return Zend_Json::encode($evolutions, true);
-    }
-
-    /**
-     * Check if Pokemon already exist by name
-     *
-     * @param array $pokemon
-     * @return bool
-     */
-    protected function alreadyExist(array $pokemon) : bool
-    {
-        if (!isset($pokemon['name'])) {
-            return false;
-        }
-        /** @var string $pokemonName */
-        $pokemonName = $pokemon['name'];
-        $target = $this->model->loadByAttribute("name", [
-            'name' => $pokemonName
-        ]);
-        if ($target && sizeof($target) >= 1) {
-            return true;
-        }
-
-        return false;
     }
 }

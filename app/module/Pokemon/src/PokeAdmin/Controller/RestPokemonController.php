@@ -12,6 +12,7 @@
 namespace Pokemon\PokeAdmin\Controller;
 
 use Pokemon\Common\Model\Entity\Pokemon;
+use Pokemon\Common\Strategy\UploadServiceStrategy;
 use Pokemon\PokeAdmin\Builder\Form\PokemonType;
 use Pokemon\PokeAdmin\Builder\Validator\PokemonFormValidator;
 use Pokemon\PokeAdmin\Strategy\PokemonServiceStrategy;
@@ -22,15 +23,19 @@ class RestPokemonController extends AbstractController
 {
     /** @var PokemonServiceStrategy $strategy*/
     protected $strategy;
+    /** @var UploadServiceStrategy $upload*/
+    protected $upload;
 
     /**
      * RestPokemonController constructor.
      *
      * @param PokemonServiceStrategy $strategy
+     * @param UploadServiceStrategy $upload
      */
-    public function __construct(PokemonServiceStrategy $strategy)
+    public function __construct(PokemonServiceStrategy $strategy, UploadServiceStrategy $upload)
     {
         $this->strategy = $strategy;
+        $this->upload = $upload;
     }
 
     /**
@@ -52,8 +57,10 @@ class RestPokemonController extends AbstractController
     {
         /** @var null $response */
         $response = null;
-        /** @var string $data */
-        $data = $this->request->getContent();
+        /** @var array $data */
+        $data = $this->params()->fromPost('data');
+        /** @var array $files */
+        $files = $this->request->getFiles('file');
         /** @var PokemonType $pokemonFormType */
         $pokemonFormType = new PokemonType();
         $pokemon = new Pokemon();
@@ -61,7 +68,8 @@ class RestPokemonController extends AbstractController
         $pokemonFormType->setInputFilter(new PokemonFormValidator());
         $pokemonFormType->setData($this->extractData($data));
         if ($pokemonFormType->isValid()) {
-            $response = $this->strategy->save($data);
+            $path = $this->upload->upload($files);
+            $response = $this->strategy->save($data, $path);
         }
 
         return $this->renderJson($response);

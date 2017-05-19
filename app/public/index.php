@@ -36,5 +36,8 @@ if (file_exists(__DIR__ . '/../config/development.config.php')) {
     $appConfig = ArrayUtils::merge($appConfig, require __DIR__ . '/../config/development.config.php');
 }
 
+define("ROOT_PATH", dirname(__FILE__), true);
+define("DS", DIRECTORY_SEPARATOR);
+
 // Run the application!
 Application::init($appConfig)->run();

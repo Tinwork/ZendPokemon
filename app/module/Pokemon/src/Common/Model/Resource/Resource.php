@@ -27,21 +27,27 @@ class Resource
      * Load object by id
      *
      * @param int $id
+     * @param string|null $table
      * @return array
      */
-    public function load(int $id)
+    public function load(int $id, $table = null)
     {
+        if (!isset($table)) {
+            $table = $this->table;
+        }
         $sql = new Sql($this->adapter);
         $where = new Where();
         $where->equalTo('id', $id);
-        $select = $sql->select($this->table);
+        $select = $sql->select($table);
         $select->columns(['*'])
             ->where($where);
 
         $stmt = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
 
-        return $this->render($result->getResource()->fetchAll());
+        $rows = $this->render($result->getResource()->fetchAll());
+
+        return $rows ? reset($rows) : [];
     }
 
     public function loadByAttribute(... $args)
@@ -61,7 +67,7 @@ class Resource
         $stmt = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
 
-        return $result->getResource()->fetchAll();
+        return $this->render($result->getResource()->fetchAll());
     }
 
     /**
@@ -84,9 +90,6 @@ class Resource
             foreach ($object as $key => $attribute) {
                 if (is_int($key) || !isset($attribute)) {
                     continue;
-                }
-                if ($this->isJson($attribute)) {
-                    $attribute = Zend_Json::decode($attribute, true);
                 }
                 $result[$index][$key] = $attribute;
             }

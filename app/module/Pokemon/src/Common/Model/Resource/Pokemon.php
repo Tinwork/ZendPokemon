@@ -16,6 +16,7 @@ use Pokemon\Common\Model\Resource\Resource;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
+use Zend\Json\Json as Zend_Json;
 
 class Pokemon extends Resource implements PokemonFacade
 {
@@ -23,23 +24,26 @@ class Pokemon extends Resource implements PokemonFacade
     /** @var string $table */
     protected $table = "pokemons";
     /** @var array $fillables */
-    protected $fillables = ["name", "rank"];
+    private $fillables = ["name", "rank"];
+    /** @var array $uniques */
+    private $uniques = ["name", "rank"];
 
     /**
      * @inheritdoc
      */
-    public function save(array $data) : bool
+    public function save(array $data, string $path) : bool
     {
         $sql = new Sql($this->adapter);
         $insert = $sql->insert($this->table)
             ->values([
                 'name'          => $data['name'],
                 'rank'          => $data['rank'],
-                'evolutions'    => $data['evolutions']
+                'evolutions'    => $data['evolutions'],
+                'thumbnail'     => $path
             ]);
 
         $statement = $sql->prepareStatementForSqlObject($insert);
-        $result = $statement->execute();
+        $statement->execute();
 
         return true;
     }
@@ -96,7 +100,7 @@ class Pokemon extends Resource implements PokemonFacade
     public function fetchOne(int $pokemonId) : array
     {
         $where = new Where();
-        $where->equalTo('id', $pokemonId);
+        $where->equalTo('rank', $pokemonId);
 
         $sql = new Sql($this->adapter);
         $select = $sql->select($this->table);
@@ -106,7 +110,11 @@ class Pokemon extends Resource implements PokemonFacade
         $stmt = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
 
-        return $result->getResource()->fetchAll();
+        $rows = $result->getResource()->fetchAll();
+
+        $pokemon = $this->loadExtraAttributes(reset($rows));
+
+        return $rows ? $this->render([$pokemon]) : [];
     }
 
     /**
@@ -121,12 +129,12 @@ class Pokemon extends Resource implements PokemonFacade
         $stmt = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
 
-        return $result->getResource()->fetchAll();
-    }
+        $pokemons = $result->getResource()->fetchAll();
+        foreach ($pokemons as $index => $pokemon) {
+            $pokemons[$index] = $this->loadEvolutions($pokemon);
+        }
 
-    public function load(int $pokemonId, string $column = null, array $attributes = null)
-    {
-
+        return $this->render($pokemons);
     }
 
     /**
@@ -135,5 +143,60 @@ class Pokemon extends Resource implements PokemonFacade
     public function getFillables() : array
     {
         return $this->fillables;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUniques() : array
+    {
+        return $this->uniques;
+    }
+
+    private function loadExtraAttributes($pokemon)
+    {
+        if (isset($pokemon['evolutions'])) {
+            //$pokemon = $this->loadEvolutions($pokemon);
+        }
+        if (isset($pokemon['type_id'])) {
+            $pokemon = $this->loadType($pokemon);
+        }
+
+        return $pokemon;
+    }
+
+    private function loadEvolutions($pokemon)
+    {
+        if (!isset($pokemon['evolutions'])) {
+            return $pokemon;
+        }
+        $resultEvolution = [];
+        $evolutions = Zend_Json::decode($pokemon['evolutions'], true);
+        foreach ($evolutions as $key => $evolution) {
+            if (!$evolution) {
+                continue;
+            }
+            foreach ($evolution as $rankToLoad) {
+                $resultEvolution[$key][] = $this->loadByAttribute('rank', [
+                    'rank' => $rankToLoad
+                ]);
+            }
+        }
+        $pokemon['evolutions'] = $resultEvolution;
+
+        return $pokemon;
+    }
+
+    private function loadType($pokemon)
+    {
+        if (!isset($pokemon['type_id'])) {
+            return $pokemon;
+        }
+        $pokemonTypeId = $pokemon['type_id'];
+        $type = $this->load($pokemonTypeId, 'types');
+        $labelType = isset($type['label']) ? $type['label'] : 'Undefined';
+        $pokemon['type_id'] = $labelType;
+
+        return $pokemon;
     }
 }

@@ -36,7 +36,16 @@ interface TypeFacade extends RepositoryInterface
      *
      * @return array
      */
-    public function fetchAll();
+    public function fetchAll() : array;
+
+    /**
+     * Fetch all types
+     *
+     * @param int $typeId
+     * @param array|null $queries
+     * @return array
+     */
+    public function fetchPokemonsByType(int $typeId, array $queries = null) : array;
 
     /**
      * Save type in database

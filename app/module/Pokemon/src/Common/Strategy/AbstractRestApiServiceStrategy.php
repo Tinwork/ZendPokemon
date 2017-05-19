@@ -11,6 +11,7 @@
  */
 namespace Pokemon\Common\Strategy;
 
+use Pokemon\Common\Model\Resource\Resource;
 use Zend\Json\Json as Zend_Json;
 
 class AbstractRestApiServiceStrategy
@@ -87,6 +88,34 @@ class AbstractRestApiServiceStrategy
             $this->addError($e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Check if resource can be saved in database
+     *
+     * @param array $uniques
+     * @param Resource $entity
+     * @param array $data
+     * @return bool
+     */
+    protected function verifyUniquesAttributes($uniques, $entity, $data) : bool
+    {
+        foreach ($uniques as $unique) {
+            if (!isset($data[$unique])) {
+                $this->addError(sprintf('Cant get the attribute %s from POST data', $unique));
+                return true;
+            }
+            $attribute = $data[$unique];
+            $target = $entity->loadByAttribute($unique, [
+                $unique => $attribute
+            ]);
+            if ($target && sizeof($target) >= 1) {
+                $this->addError(sprintf('The attribute %s with value %s already exist', $unique, $attribute));
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
