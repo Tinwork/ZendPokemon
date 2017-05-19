@@ -17,7 +17,7 @@ use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
 
-class GeoPosition implements GeoPositionFacade
+class GeoPosition extends Resource implements GeoPositionFacade
 {
     use AdapterAwareTrait;
     /** @var string $table */
@@ -56,6 +56,8 @@ class GeoPosition implements GeoPositionFacade
      */
     public function save(int $pokemonId, array $position) : array
     {
+        var_dump($pokemonId);
+        var_dump($position);
         try {
 
         } catch (\Exception $e) {

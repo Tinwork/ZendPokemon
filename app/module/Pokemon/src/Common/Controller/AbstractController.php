@@ -65,4 +65,15 @@ class AbstractController extends AbstractActionController
 
         return $data[self::BODY_KEY];
     }
+
+    public function getFormErrors($form)
+    {
+        $errors = [];
+        $messages = $form->getMessages();
+        foreach ($messages as $message) {
+            $errors[] = reset($message);
+        }
+
+        return $errors;
+    }
 }

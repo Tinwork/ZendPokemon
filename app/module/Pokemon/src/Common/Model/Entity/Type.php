@@ -13,5 +13,40 @@ namespace Pokemon\Common\Model\Entity;
 
 class Type
 {
+    /** @var int $id */
+    protected $id;
+    /** @var string $label */
+    protected $label;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string $label
+     */
+    public function setLabel(string $label)
+    {
+        $this->label = $label;
+    }
 }

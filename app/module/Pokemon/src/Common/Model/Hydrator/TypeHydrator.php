@@ -26,7 +26,7 @@ class TypeHydrator implements HydratorInterface
         }
 
         return [
-            'id' => $object->getId()
+            'label' => $object->getLabel()
         ];
     }
 
@@ -38,6 +38,7 @@ class TypeHydrator implements HydratorInterface
         if (!$object instanceof Type) {
             return $object;
         }
+        $object->setLabel(isset($data['label']) ? (string)($data['label']) : null);
 
         return $object;
     }

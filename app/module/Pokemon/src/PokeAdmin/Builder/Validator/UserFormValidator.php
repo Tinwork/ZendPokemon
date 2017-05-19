@@ -26,5 +26,25 @@ use Zend\Validator\ValidatorInterface;
 
 class UserFormValidator extends InputFilter
 {
+    public function __construct()
+    {
+        $username = new Input('username');
+        $username->setRequired(true);
+        $username->setFilterChain($this->getStringTrimFilterChain());
 
+        $password = new Input('password');
+        $password->setRequired(true);
+        $password->setFilterChain($this->getStringTrimFilterChain());
+
+        $this->add($username);
+        $this->add($password);
+    }
+
+    protected function getStringTrimFilterChain()
+    {
+        $filterChain = new FilterChain();
+        $filterChain->attach(new StringTrim());
+
+        return $filterChain;
+    }
 }

@@ -64,7 +64,7 @@ class AdminController extends AbstractController
     public function create()
     {
         /** @var string $data */
-        $data = $this->request->getContent();
+        $data = $this->params()->fromPost('data');
         /** @var array $response */
         $response = $this->adminService->createAdmin($data);
 

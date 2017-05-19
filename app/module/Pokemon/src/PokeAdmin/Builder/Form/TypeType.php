@@ -23,6 +23,10 @@ class TypeType extends Form
 
         $this->setHydrator(new TypeHydrator());
 
-        // TODO
+        $label = new Element\Text('label');
+        $submit = new Element\Submit('submit');
+
+        $this->add($label);
+        $this->add($submit);
     }
 }

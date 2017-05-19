@@ -23,9 +23,9 @@ class Type extends Resource implements TypeFacade
     /** @var string $table */
     protected $table = "types";
     /** @var array $fillables */
-    protected $fillables = ["name"];
+    protected $fillables = ["label"];
     /** @var array $uniques */
-    protected $uniques = ["name"];
+    protected $uniques = ["label"];
 
     /**
      * @inheritDoc
@@ -102,7 +102,7 @@ class Type extends Resource implements TypeFacade
             $sql = new Sql($this->adapter);
             $insert = $sql->insert($this->table)
                 ->values([
-                    'label' => $data['name']
+                    'label' => $data['label']
                 ]);
             $statement = $sql->prepareStatementForSqlObject($insert);
             $result = $statement->execute();

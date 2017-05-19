@@ -35,19 +35,23 @@ class GeoServiceStrategy extends AbstractRestApiServiceStrategy
     }
 
     /**
-     * @param int $pokemonId
+     * @param int $pokemonRank
      * @param string $position
      * @return array
      */
-    public function savePosition(int $pokemonId, string $position)
+    public function savePosition(int $pokemonRank, string $position)
     {
-        if (!$pokemonId || !$this->format($position)) {
+        if (!$pokemonRank || !$this->format($position)) {
             $this->addError('Missing ID or missconfigured post data');
             return $this->__r();
         }
         /** @var array $position */
         $position = $this->format($position);
-        $res = $this->resource->save($pokemonId, $position);
+        if (!$this->isPokemonExist($pokemonRank)) {
+            $this->addError(sprintf('The pokemon with rank %s doesnt exist in our database', $pokemonRank));
+            return $this->__r();
+        }
+        $res = $this->resource->save($pokemonRank, $position);
         if (!$res) {
             $this->addError('Error when save pokemon to database');
             return $this->__r();
@@ -64,5 +68,19 @@ class GeoServiceStrategy extends AbstractRestApiServiceStrategy
     public function isAllowedPosition(array $positions)
     {
 
+    }
+
+    /**
+     * @param int $rank
+     * @return bool
+     */
+    private function isPokemonExist(int $rank) : bool
+    {
+        if (!isset($rank)) {
+            return false;
+        }
+        $pokemon = $this->resource->load($rank, 'pokemons');
+
+        return $pokemon ? true : false;
     }
 }

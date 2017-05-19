@@ -22,6 +22,10 @@ class Resource
 
     /** @var string $table */
     protected $table = "table";
+    /** @var array $fillables */
+    protected $fillables = [];
+    /** @var array $uniques */
+    protected $uniques = [];
 
     /**
      * Load object by id
@@ -68,6 +72,22 @@ class Resource
         $result = $stmt->execute();
 
         return $this->render($result->getResource()->fetchAll());
+    }
+
+    /**
+     * @return array
+     */
+    public function getFillables() : array
+    {
+        return $this->fillables;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUniques() : array
+    {
+        return $this->uniques;
     }
 
     /**

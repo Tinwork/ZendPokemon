@@ -70,6 +70,9 @@ class RestPokemonController extends AbstractController
         if ($pokemonFormType->isValid()) {
             $path = $this->upload->upload($files);
             $response = $this->strategy->save($data, $path);
+        } else {
+            $this->strategy->setErrors($this->getFormErrors($pokemonFormType));
+            $response = $this->strategy->__r();
         }
 
         return $this->renderJson($response);

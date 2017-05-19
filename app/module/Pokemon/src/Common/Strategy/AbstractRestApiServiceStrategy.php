@@ -32,7 +32,7 @@ class AbstractRestApiServiceStrategy
      *
      * @return array
      */
-    protected function __r(array $response = null) : array
+    public function __r(array $response = null) : array
     {
         /** @var array $return */
         $return = [];
@@ -54,6 +54,22 @@ class AbstractRestApiServiceStrategy
         }
 
         return $return;
+    }
+
+    /**
+     * @param array $errors
+     */
+    public function setErrors(array $errors)
+    {
+        $this->errors = $errors;
+    }
+
+    /**
+     * @param array $warnings
+     */
+    public function setWarnings(array $warnings)
+    {
+        $this->warnings = $warnings;
     }
 
     /**

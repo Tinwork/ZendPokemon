@@ -26,5 +26,20 @@ use Zend\Validator\ValidatorInterface;
 
 class TypeFormValidator extends InputFilter
 {
+    public function __construct()
+    {
+        $label = new Input('label');
+        $label->setRequired(true);
+        $label->setFilterChain($this->getStringTrimFilterChain());
 
+        $this->add($label);
+    }
+
+    protected function getStringTrimFilterChain()
+    {
+        $filterChain = new FilterChain();
+        $filterChain->attach(new StringTrim());
+
+        return $filterChain;
+    }
 }

@@ -19,10 +19,16 @@ class UserType extends Form
 {
     public function __construct()
     {
-        parent::__construct('user_form_add');
+        parent::__construct('admin_form_add');
 
         $this->setHydrator(new UserHydrator());
 
-        // TODO
+        $username = new Element\Text('username');
+        $password = new Element\Text('password');
+        $submit = new Element\Submit('submit');
+
+        $this->add($username);
+        $this->add($password);
+        $this->add($submit);
     }
 }

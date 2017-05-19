@@ -26,7 +26,9 @@ class UserHydrator implements HydratorInterface
         }
 
         return [
-            'id' => $object->getId()
+            'username' => $object->getUsername(),
+            'password' => $object->getPassword(),
+            'role' => $object->getRole()
         ];
     }
 
@@ -38,6 +40,9 @@ class UserHydrator implements HydratorInterface
         if (!$object instanceof User) {
             return $object;
         }
+        $object->setUsername(isset($data['username']) ? (string)($data['username']) : null);
+        $object->setPassword(isset($data['password']) ? (string)($data['password']) : null);
+        $object->setRole(isset($data['role']) ? (string)($data['role']) : null);
 
         return $object;
     }

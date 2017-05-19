@@ -24,9 +24,9 @@ class Pokemon extends Resource implements PokemonFacade
     /** @var string $table */
     protected $table = "pokemons";
     /** @var array $fillables */
-    private $fillables = ["name", "rank"];
+    protected $fillables = ["name", "rank"];
     /** @var array $uniques */
-    private $uniques = ["name", "rank"];
+    protected $uniques = ["name", "rank"];
 
     /**
      * @inheritdoc
@@ -78,8 +78,9 @@ class Pokemon extends Resource implements PokemonFacade
         $delete->where($where);
 
         $stmt = $sql->prepareStatementForSqlObject($delete);
+        $res = $stmt->execute();
 
-        return (bool)$stmt->execute();
+        return (int)$res->getAffectedRows() == 1 ? true : false;
     }
 
     /**
@@ -135,22 +136,6 @@ class Pokemon extends Resource implements PokemonFacade
         }
 
         return $this->render($pokemons);
-    }
-
-    /**
-     * @return array
-     */
-    public function getFillables() : array
-    {
-        return $this->fillables;
-    }
-
-    /**
-     * @return array
-     */
-    public function getUniques() : array
-    {
-        return $this->uniques;
     }
 
     private function loadExtraAttributes($pokemon)

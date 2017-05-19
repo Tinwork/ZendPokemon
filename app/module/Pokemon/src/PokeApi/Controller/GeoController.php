@@ -16,8 +16,8 @@ use Pokemon\PokeApi\Strategy\GeoServiceStrategy;
 
 class GeoController extends AbstractController
 {
-    /** @var GeoServiceStrategy*/
-    protected $strategy;
+    /** @var GeoServiceStrategy $geoStrategy */
+    protected $geoStrategy;
 
     /**
      * GeoController constructor.
@@ -26,7 +26,7 @@ class GeoController extends AbstractController
      */
     public function __construct(GeoServiceStrategy $strategy)
     {
-        $this->strategy = $strategy;
+        $this->geoStrategy = $strategy;
     }
 
     /**
@@ -37,9 +37,9 @@ class GeoController extends AbstractController
         /** @var int $pokemonId */
         $pokemonId = $this->params()->fromRoute('id');
         /** @var string $data */
-        $data = $this->request->getContent();
+        $data = $this->params()->fromPost('data');
         /** @var array $response */
-        $response = $this->strategy->savePosition($pokemonId, $data);
+        $response = $this->geoStrategy->savePosition($pokemonId, $data);
 
         return $this->renderJson($response);
     }

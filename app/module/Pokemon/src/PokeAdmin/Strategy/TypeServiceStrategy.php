@@ -46,6 +46,9 @@ class TypeServiceStrategy extends AbstractRestApiServiceStrategy
             $this->addError("Trouble in POST data");
             return $this->__r();
         }
+        if ($this->verifyUniquesAttributes($this->model->getUniques(), $this->model, $data)) {
+            return $this->__r();
+        }
         /** @var array $response */
         $response = $this->model->save($data);
 
