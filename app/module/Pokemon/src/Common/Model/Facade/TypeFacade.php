@@ -36,15 +36,25 @@ interface TypeFacade extends RepositoryInterface
      *
      * @return array
      */
-    public function fetchAll();
+    public function fetchAll() : array;
+
+    /**
+     * Fetch all types
+     *
+     * @param int $typeId
+     * @param array|null $queries
+     * @return array
+     */
+    public function fetchPokemonsByType(int $typeId, array $queries = null) : array;
 
     /**
      * Save type in database
      *
      * @param array $data
-     * @return bool
+     * @return array
+     * @throws \Exception
      */
-    public function save(array $data) : bool;
+    public function save(array $data) : array;
 
     /**
      * Update type by id
@@ -54,4 +64,12 @@ interface TypeFacade extends RepositoryInterface
      * @return bool
      */
     public function update(int $typeId, array $data) : bool;
+
+    /**
+     * Delete type by id
+     *
+     * @param int $typeId
+     * @return bool
+     */
+    public function delete(int $typeId) : bool;
 }

@@ -45,7 +45,7 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
     public function fetch(int $pokemonId = null)
     {
         return $this->__r([
-            'collection' => $this->resource->fetch($pokemonId)
+            'pokemons' => $this->resource->fetch($pokemonId)
         ]);
     }
 }

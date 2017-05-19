@@ -11,7 +11,10 @@
  */
 namespace Pokemon\PokeAdmin\Controller;
 
+use Pokemon\Common\Model\Entity\Type;
 use Pokemon\Common\Controller\AbstractController;
+use Pokemon\PokeAdmin\Builder\Form\TypeType;
+use Pokemon\PokeAdmin\Builder\Validator\TypeFormValidator;
 use Pokemon\PokeAdmin\Strategy\TypeServiceStrategy;
 
 class TypeController extends AbstractController
@@ -55,10 +58,23 @@ class TypeController extends AbstractController
      */
     public function create()
     {
+        /** @var null $response */
+        $response = null;
         /** @var string $data */
-        $data = $this->request->getContent();
-        /** @var array $response */
-        $response = $this->typeService->save($data);
+        $data = $this->params()->fromPost('data');
+        /** @var TypeType $typeFormType */
+        $typeFormType = new TypeType();
+        $type = new Type();
+        $typeFormType->bind($type);
+        $typeFormType->setInputFilter(new TypeFormValidator());
+        $typeFormType->setData($this->extractData($data));
+        if ($typeFormType->isValid()) {
+            /** @var array $response */
+            $response = $this->typeService->save($data);
+        } else {
+            $this->typeService->setErrors($this->getFormErrors($typeFormType));
+            $response = $this->typeService->__r();
+        }
 
         return $this->renderJson($response);
     }
@@ -80,6 +96,11 @@ class TypeController extends AbstractController
      */
     public function destroy()
     {
-        die('destroy');
+        /** @var int $typeId */
+        $typeId = $this->params()->fromRoute('id');
+        /** @var array $response */
+        $response = $this->typeService->delete($typeId);
+
+        return $this->renderJson($response);
     }
 }

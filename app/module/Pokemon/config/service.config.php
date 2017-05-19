@@ -16,11 +16,13 @@ return [
     'invokables' => [
         'Common\Resource\Pokemon'   => 'Pokemon\Common\Model\Resource\Pokemon',
         'Common\Resource\User'      => 'Pokemon\Common\Model\Resource\User',
-        'Common\Resource\Type'      => 'Pokemon\Common\Model\Resource\Type'
+        'Common\Resource\Type'      => 'Pokemon\Common\Model\Resource\Type',
+        'Common\Resource\Geo'       => 'Pokemon\Common\Model\Resource\GeoPosition'
     ],
 
     'factories' => [
         'Common\Config'             => 'Pokemon\Common\Service\ConfigServiceFactory',
+        'Common\Upload'             => 'Pokemon\Common\Service\UploadServiceFactory',
 
         'PokeAdmin\OAuth'           => 'Pokemon\PokeAdmin\Service\OAuthServiceFactory',
         'PokeAdmin\Unauthorized'    => 'Pokemon\PokeAdmin\Service\UnauthorizedStrategyServiceFactory',

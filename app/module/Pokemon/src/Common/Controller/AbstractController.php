@@ -13,9 +13,13 @@ namespace Pokemon\Common\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
+use Zend\Json\Json as Zend_Json;
 
 class AbstractController extends AbstractActionController
 {
+    /** @var string BODY_KEY */
+    const BODY_KEY = "body";
+
     /**
      * Pre-dispatch to good actions for REST routes
      */
@@ -44,5 +48,32 @@ class AbstractController extends AbstractActionController
     protected function renderJson(array $params)
     {
         return new JsonModel($params);
+    }
+
+    protected function extractData(string $data)
+    {
+        try {
+            if (Zend_Json::decode($data, 'json')) {
+                $data = Zend_Json::decode($data, 'json');
+                if (!isset($data[self::BODY_KEY])) {
+                    return [];
+                }
+            }
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        return $data[self::BODY_KEY];
+    }
+
+    public function getFormErrors($form)
+    {
+        $errors = [];
+        $messages = $form->getMessages();
+        foreach ($messages as $message) {
+            $errors[] = reset($message);
+        }
+
+        return $errors;
     }
 }

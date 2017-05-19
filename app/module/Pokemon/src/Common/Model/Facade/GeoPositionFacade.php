@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class PokemonFacade
+ * Class GeoPositionFacade
  *
  * @package             Pokemon\Common\Model\Facade
  * @author              Didier Youn <didier.youn@gmail.com>, Marc Intha-Amnouay <marc.inthaamnouay@gmail.com>, Antoine Renault <antoine.renault.mmi@gmail.com>
@@ -13,54 +13,47 @@ namespace Pokemon\Common\Model\Facade;
 
 use Application\Repository\RepositoryInterface;
 
-interface PokemonFacade extends RepositoryInterface
+interface GeoPositionFacade extends RepositoryInterface
 {
     /**
-     * Fetch one or all pokemons
+     * Fetch one or all type
      *
-     * @param int $pokemonId
+     * @param int $typeId
      * @return array
      */
-    public function fetch(int $pokemonId) : array;
+    public function fetch(int $typeId) : array;
 
     /**
-     * Fetch one pokemon
+     * Fetch one type
      *
-     * @param int $pokemonId
+     * @param int $typeId
      * @return array
      */
-    public function fetchOne(int $pokemonId) : array;
+    public function fetchOne(int $typeId) : array;
 
     /**
-     * Fetch all pokemons
+     * Fetch all types
      *
      * @return array
      */
     public function fetchAll();
 
     /**
-     * Save pokemon in database
-     *
-     * @param array $data
-     * @param string $path
-     * @return bool
-     */
-    public function save(array $data, string $path) : bool;
-
-    /**
-     * Update pokemon by id
+     * Save new location in database
      *
      * @param int $pokemonId
      * @param array $data
-     * @return bool
+     * @return array
+     * @throws \Exception
      */
-    public function update(int $pokemonId, array $data) : bool;
+    public function save(int $pokemonId, array $data) : array;
+
 
     /**
-     * Delete pokemon
+     * Delete type by id
      *
-     * @param int $pokemonId
+     * @param int $typeId
      * @return bool
      */
-    public function delete(int $pokemonId) : bool;
+    public function delete(int $typeId) : bool;
 }

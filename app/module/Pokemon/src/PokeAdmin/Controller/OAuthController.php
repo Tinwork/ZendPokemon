@@ -41,15 +41,8 @@ class OAuthController extends AbstractController
         /** @var string $password */
         $password = $this->request->getPost('password');
         /** @var bool|string $token */
-        $token = $this->oauthService->forward($username, $password);
-        if (!$token) {
-            $response = $this->getResponse();
-            $response->setStatusCode(401);
-            return $response;
-        }
+        $response = $this->oauthService->forward($username, $password);
 
-        return $this->renderJson([
-            "token" => $token
-        ]);
+        return $this->renderJson($response);
     }
 }

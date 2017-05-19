@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class PokemonFormValidator
+ * Class UserFormValidator
  *
  * @package             Pokemon\PokeAdmin\Builder\Validator
  * @author              Didier Youn <didier.youn@gmail.com>, Marc Intha-Amnouay <marc.inthaamnouay@gmail.com>, Antoine Renault <antoine.renault.mmi@gmail.com>
@@ -24,34 +24,27 @@ use Zend\Validator\StringLength;
 use Zend\Validator\ValidatorChain;
 use Zend\Validator\ValidatorInterface;
 
-class PokemonFormValidator extends InputFilter
+class UserFormValidator extends InputFilter
 {
     public function __construct()
     {
-        $name = new Input('name');
-        $name->setRequired(true);
-        $name->setFilterChain($this->getStringTrimFilterChain());
-        $name->setValidatorChain($this->getTitleValidatorChain());
+        $username = new Input('username');
+        $username->setRequired(true);
+        $username->setFilterChain($this->getStringTrimFilterChain());
 
-        $this->add($name);
-    }
+        $password = new Input('password');
+        $password->setRequired(true);
+        $password->setFilterChain($this->getStringTrimFilterChain());
 
-    protected function getTitleValidatorChain()
-    {
-        $stringLength = new StringLength();
-        $stringLength->setMin(5);
-        $stringLength->setMax(50);
-
-        $validatorChain = new ValidatorChain();
-        $validatorChain->attach($stringLength);
-
-        return $validatorChain;
+        $this->add($username);
+        $this->add($password);
     }
 
     protected function getStringTrimFilterChain()
     {
         $filterChain = new FilterChain();
         $filterChain->attach(new StringTrim());
+
         return $filterChain;
     }
 }

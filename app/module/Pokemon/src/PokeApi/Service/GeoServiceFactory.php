@@ -35,7 +35,7 @@ class GeoServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $resource = $container->get('Common\Resource\Type');
+        $resource = $container->get('Common\Resource\Geo');
 
         return new GeoServiceStrategy($resource);
     }

@@ -12,19 +12,31 @@
 namespace Pokemon\Common\Model\Resource;
 
 use Pokemon\Common\Model\Facade\TypeFacade;
-
+use Pokemon\Common\Model\Resource\Resource;
 use Zend\Db\Adapter\AdapterAwareTrait;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Where;
 
-class Type implements TypeFacade
+class Type extends Resource implements TypeFacade
 {
     use AdapterAwareTrait;
+    /** @var string $table */
+    protected $table = "types";
+    /** @var array $fillables */
+    protected $fillables = ["label"];
+    /** @var array $uniques */
+    protected $uniques = ["label"];
 
     /**
      * @inheritDoc
      */
-    public function fetch(int $typeId): array
+    public function fetch(int $typeId = null): array
     {
-        // TODO: Implement fetch() method.
+        if (isset($typeId)) {
+            return $this->render($this->fetchOne($typeId));
+        }
+
+        return $this->render($this->fetchAll());
     }
 
     /**
@@ -32,23 +44,77 @@ class Type implements TypeFacade
      */
     public function fetchOne(int $typeId): array
     {
-        // TODO: Implement fetchOne() method.
+        $where = new Where();
+        $where->equalTo('id', $typeId);
+
+        $sql = new Sql($this->adapter);
+        $select = $sql->select($this->table);
+        $select->columns(['*'])
+            ->where($where);
+
+        $stmt = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        return $result->getResource()->fetchAll();
     }
 
     /**
      * @inheritDoc
      */
-    public function fetchAll()
+    public function fetchAll() : array
     {
-        // TODO: Implement fetchAll() method.
+        $sql = new Sql($this->adapter);
+        $select = $sql->select($this->table);
+        $select->columns(['*']);
+
+        $stmt = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        return $this->render($result->getResource()->fetchAll());
     }
 
     /**
      * @inheritDoc
      */
-    public function save(array $data): bool
+    public function fetchPokemonsByType(int $typeId, array $queries = null) : array
     {
-        // TODO: Implement save() method.
+        $sql = new Sql($this->adapter);
+
+        $where = new Where();
+        $where->equalTo('type_id', $typeId);
+
+        $select = $sql->select('pokemons');
+        $select->columns($queries);
+        $select->where($where);
+
+        $stmt = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        return $this->render($result->getResource()->fetchAll());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function save(array $data) : array
+    {
+        try {
+            $sql = new Sql($this->adapter);
+            $insert = $sql->insert($this->table)
+                ->values([
+                    'label' => $data['label']
+                ]);
+            $statement = $sql->prepareStatementForSqlObject($insert);
+            $result = $statement->execute();
+        } catch (\Exception $e) {
+            return [
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return [
+            "value" => (string)$result->getGeneratedValue()
+        ];
     }
 
     /**
@@ -59,5 +125,22 @@ class Type implements TypeFacade
         // TODO: Implement update() method.
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function delete(int $typeId): bool
+    {
+        $sql = new Sql($this->adapter);
 
+        $where = new Where();
+        $where->equalTo('id', $typeId);
+
+        $delete = $sql->delete($this->table);
+        $delete->where($where);
+
+        $stmt = $sql->prepareStatementForSqlObject($delete);
+        $res = $stmt->execute();
+
+        return (int)$res->getAffectedRows() == 1 ? true : false;
+    }
 }

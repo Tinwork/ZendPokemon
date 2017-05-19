@@ -23,7 +23,7 @@ class Pokemon
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -39,7 +39,7 @@ class Pokemon
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -55,7 +55,7 @@ class Pokemon
     /**
      * @return string
      */
-    public function getRank(): string
+    public function getRank()
     {
         return $this->rank;
     }

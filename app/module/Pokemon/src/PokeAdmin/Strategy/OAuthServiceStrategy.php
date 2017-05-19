@@ -14,8 +14,9 @@ namespace Pokemon\PokeAdmin\Strategy;
 use Firebase\JWT\JWT;
 
 use Pokemon\Common\Model\Resource\User;
+use Pokemon\Common\Strategy\AbstractRestApiServiceStrategy;
 
-class OAuthServiceStrategy
+class OAuthServiceStrategy extends AbstractRestApiServiceStrategy
 {
     /** @var User $model */
     protected $model;
@@ -38,20 +39,24 @@ class OAuthServiceStrategy
      *
      * @param string $username
      * @param string $password
-     * @return array|bool
+     * @return array
      */
-    public function forward(string $username, string $password)
+    public function forward(string $username, string $password) : array
     {
         $user = $this->authenticate($username, $password);
         if (!$user) {
-            return false;
+            $this->addError(sprintf('The user as : %s doesn\'t exist', $username));
+            return $this->__r();
         }
         $token = $this->getToken($user);
         if (!$token) {
-            return false;
+            $this->addError(sprintf('The token for the user : %s has expired or is not validate', $username));
+            return $this->__r();
         }
 
-        return $token;
+        return $this->__r([
+           'token' => $token
+        ]);
     }
 
     /**
