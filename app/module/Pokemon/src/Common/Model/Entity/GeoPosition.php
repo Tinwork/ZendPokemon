@@ -13,5 +13,58 @@ namespace Pokemon\Common\Model\Entity;
 
 class GeoPosition
 {
+    /** @var int $id */
+    private $id;
+    /** @var float $longitude */
+    private $longitude;
+    /** @var float $latitude */
+    private $latitude;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return float
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param float $longitude
+     */
+    public function setLongitude(float $longitude)
+    {
+        $this->longitude = $longitude;
+    }
+
+    /**
+     * @return float
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * @param float $latitude
+     */
+    public function setLatitude(float $latitude)
+    {
+        $this->latitude = $latitude;
+    }
 }

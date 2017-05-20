@@ -12,6 +12,9 @@
 namespace Pokemon\PokeApi\Controller;
 
 use Pokemon\Common\Controller\AbstractController;
+use Pokemon\Common\Model\Entity\GeoPosition;
+use Pokemon\PokeApi\Builder\Form\GeoPositionType;
+use Pokemon\PokeApi\Builder\Validator\GeoPositionFormValidator;
 use Pokemon\PokeApi\Strategy\GeoServiceStrategy;
 
 class GeoController extends AbstractController
@@ -29,17 +32,43 @@ class GeoController extends AbstractController
         $this->geoStrategy = $strategy;
     }
 
+    public function showAction()
+    {
+        die('show');
+    }
+
     /**
      * Add new localisation
      */
     public function localisationAction()
     {
+        /** @var null $response */
+        $response = null;
         /** @var int $pokemonId */
         $pokemonId = $this->params()->fromRoute('id');
-        /** @var string $data */
-        $data = $this->params()->fromPost('data');
-        /** @var array $response */
-        $response = $this->geoStrategy->savePosition($pokemonId, $data);
+        if ($this->request->isPost()) {
+            /** @var string $data */
+            $data = $this->params()->fromPost('data');
+            /** @var GeoPositionType $geoPositionFormType */
+            $geoPositionFormType = new GeoPositionType();
+            $geoPosition = new GeoPosition();
+            $geoPositionFormType->bind($geoPosition);
+            $geoPositionFormType->setInputFilter(new GeoPositionFormValidator());
+            $geoPositionFormType->setData($this->extractData($data));
+            if ($geoPositionFormType->isValid()) {
+                /** @var array $response */
+                $response = $this->geoStrategy->savePosition($pokemonId, $data);
+            } else {
+                $this->geoStrategy->setErrors($this->getFormErrors($geoPositionFormType));
+                $response = $this->geoStrategy->__r();
+            }
+
+            return $this->renderJson($response);
+        }
+        $longitude = $this->request->getQuery('long');
+        $latitude = $this->request->getQuery('lat');
+        $rayon = $this->request->getQuery('r');
+        $response = $this->geoStrategy->radar($longitude, $latitude, $rayon, $pokemonId);
 
         return $this->renderJson($response);
     }
