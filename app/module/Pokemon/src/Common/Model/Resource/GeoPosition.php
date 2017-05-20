@@ -23,9 +23,7 @@ class GeoPosition extends Resource implements GeoPositionFacade
     /** @var string $table */
     protected $table = "positions";
     /** @var array $fillables */
-    protected $fillables = ["name"];
-    /** @var array $uniques */
-    protected $uniques = ["name"];
+    protected $fillables = ["long", "lat", "pokemon_id"];
 
     /**
      * @inheritDoc
@@ -51,15 +49,69 @@ class GeoPosition extends Resource implements GeoPositionFacade
         // TODO: Implement fetchAll() method.
     }
 
+    public function radar($longitude, $latitude, $rayon, $pokemonId = null)
+    {
+        $pokemonList = [
+            'radar' => [
+                'longitude' => $longitude,
+                'latitude'  => $latitude
+            ],
+            'result' => []
+        ];
+
+        try {
+            $sql = new Sql($this->adapter);
+            $where = new Where();
+            $where->between('longitude', $longitude - $rayon - 0.0001, $longitude + $rayon + 0.0001);
+            $where->between('latitude', $latitude - $rayon - 0.0001, $latitude + $rayon + 0.0001);
+            if ($pokemonId) {
+                $where->equalTo('pokemon_id', $pokemonId);
+            }
+            $select = $sql->select($this->table);
+            $select->columns(['*'])
+                ->where($where);
+
+            $stmt = $sql->prepareStatementForSqlObject($select);
+            $result = $stmt->execute();
+
+            $rows = $result->getResource()->fetchAll();
+            $pokemonList['result'] = $result->getAffectedRows();
+            foreach ($rows as $row) {
+                if (!isset($row['pokemon_id'])) {
+                    continue;
+                }
+                $pokemonId = $row['pokemon_id'];
+                $pokemonList['collection'][] = [
+                    'pokemon'   => $this->load($pokemonId, 'pokemons'),
+                    'icon'      => 'icone'
+                ];
+            }
+
+        } catch (\Exception $e) {
+            return [
+                "value" => $e->getMessage()
+            ];
+        }
+
+        return $pokemonList;
+    }
+
     /**
      * @inheritDoc
      */
     public function save(int $pokemonId, array $position) : array
     {
-        var_dump($pokemonId);
-        var_dump($position);
         try {
+            $sql = new Sql($this->adapter);
+            $insert = $sql->insert($this->table)
+                ->values([
+                    'pokemon_id' => $pokemonId,
+                    'longitude' => $position['longitude'],
+                    'latitude' => $position['latitude'],
+                ]);
 
+            $statement = $sql->prepareStatementForSqlObject($insert);
+            $result = $statement->execute();
         } catch (\Exception $e) {
             return [
                 "error" => $e->getMessage()
@@ -67,7 +119,7 @@ class GeoPosition extends Resource implements GeoPositionFacade
         }
 
         return [
-            "value" => true
+            "value" => $result->getGeneratedValue()
         ];
     }
 

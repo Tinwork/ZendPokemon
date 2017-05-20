@@ -21,6 +21,8 @@ use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 class GeoServiceStrategy extends AbstractRestApiServiceStrategy
 {
+    /** @var string DEFAULT_RAYON */
+    const DEFAULT_RAYON = 10;
     /** @var GeoPosition $resource */
     protected $resource;
 
@@ -32,6 +34,30 @@ class GeoServiceStrategy extends AbstractRestApiServiceStrategy
     public function __construct(GeoPosition $resource)
     {
         $this->resource = $resource;
+    }
+
+    /**
+     * Radar by lat / long and filter by pokemon if exist
+     *
+     * @param float $longitude
+     * @param float $latitude
+     * @param float|null $rayon
+     * @param int|null $pokemonId
+     *
+     * @return array
+     */
+    public function radar(float $longitude, float $latitude, float $rayon = null, int $pokemonId = null)
+    {
+        if (!$longitude || !$latitude) {
+            $this->addError("Latitude or longitude are undefined");
+            return $this->__r();
+        }
+        if (is_null($rayon)) {
+            $rayon = self::DEFAULT_RAYON;
+        }
+        return $this->__r([
+            'result' => $this->resource->radar($longitude, $latitude, $rayon, $pokemonId)
+        ]);
     }
 
     /**
