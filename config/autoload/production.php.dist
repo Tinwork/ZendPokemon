@@ -1,0 +1,30 @@
+<?php
+/**
+ * Local Configuration Override
+ *
+ * This configuration override file is for overriding environment-specific and
+ * security-sensitive configuration information. Copy this file without the
+ * .dist extension at the end and populate values as needed.
+ *
+ * @NOTE: This file is ignored from Git by default with the .gitignore included
+ * in ZendSkeletonApplication. This is a good practice, as it prevents sensitive
+ * credentials from accidentally being committed into version control.
+ */
+
+return [
+    'db' => [
+        'driver'    => 'Pdo',
+        'dsn'       => 'mysql:dbname=tinwork_db;host=tinwork-zend-db.cegjblriup2p.eu-west-1.rds.amazonaws.com',
+        'username'  => 'tinwork',
+        'password'  => 'tinwork2017',
+        'driver_options' => [
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+        ],
+    ],
+    'api' => [
+        'JWT_ALGORITHM'             => 'HS512',
+        'TOKEN_EXPIRED_AT'          => 3600,
+        'SECRET_APPLICATION_ID'     => '41CA66A2EC6951F26FD97623FA71D',
+        'SECRET_APPLICATION_HOST'   => 'local.dev',
+    ]
+];
