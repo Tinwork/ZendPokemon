@@ -8,7 +8,7 @@ ubuntu-xenial-16.04-cloudimg-console.log
 
 public/storage
 .idea/
-utils/docker/mysql
 public/img/icon/
 utils/docker/dockerfile/
-utils/docker/
+utils/docker/mysql
+utils/docker/nginx/log
