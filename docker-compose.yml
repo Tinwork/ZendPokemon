@@ -1,28 +1,30 @@
 version: '2'
 services: 
     web: 
-        image: ubuntu/nginx
+        image: didyoun/ubuntu-nginx
         ports:
-            - "8181:80"
+            - "8080:80"
         volumes:
-            - ./app:/data/www/
+            - .:/data/www/
             
-            - ./docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-            - ./docker/nginx/conf/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+            - ./utils/docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+            - ./utils/docker/nginx/conf/conf.d/default.conf:/etc/nginx/conf.d/default.conf
             
-            - ./docker/nginx/log/error.log:/var/log/nginx/error.log
-            - ./docker/nginx/log/access.log:/var/log/nginx/access.log
+            - ./utils/docker/nginx/log/error.log:/var/log/nginx/error.log
+            - ./utils/docker/nginx/log/access.log:/var/log/nginx/access.log
         links:
             - phpfpm:phpfpm
             - mysql:db
+        environment:
+            MYSQL_DB_LOGIN : root
+            MYSQL_DB_PASSWORD : admin
+            MYSQL_DB_HOST : db
     phpfpm:
-        build: 
-            context: ./docker/dockerfile/php
-            dockerfile: Dockerfile
+        image: didyoun/php7-fpm
         ports:
             - "9000:9000"
         volumes:
-            - ./app:/data/www/
+            - .:/data/www/
     mysql:
         image: mysql
         environment:
@@ -31,11 +33,10 @@ services:
         ports:
             - "3306:3306" 
         volumes:
-            - ./docker/mysql:/var/lib/mysql
-            - ./docker/data/:/data/import/
+            - ./utils/docker/mysql:/var/lib/mysql
+            - ./utils/docker/data/:/data/import/
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        restart: always
         links:
             - mysql:db
         ports:
