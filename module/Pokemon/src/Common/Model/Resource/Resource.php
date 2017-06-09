@@ -65,7 +65,7 @@ class Resource
         $where = new Where();
         $select = $sql->select($this->table);
         foreach ($attributes as $column => $attribute) {
-            $where->like($column, '%' . $attribute . '%');
+            $where->equalTo($column, $attribute);
         }
         $select->columns(['*'])->where($where);
         $stmt = $sql->prepareStatementForSqlObject($select);
