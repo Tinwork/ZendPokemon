@@ -16,7 +16,7 @@ return [
     'guards' => [
         'restriction' => [
             'admin' => [
-                'pattern' => '/^(?P<admin_pattern>\/admin\/.{1,})$/i',
+                'pattern' => '/^(?P<admin_pattern>\/admin[\/]?.{0,})$/i',
                 'routes' => [
                     '/admin/*'
                 ]

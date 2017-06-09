@@ -132,7 +132,7 @@ class Pokemon extends Resource implements PokemonFacade
 
         $pokemons = $result->getResource()->fetchAll();
         foreach ($pokemons as $index => $pokemon) {
-            $pokemons[$index] = $this->loadEvolutions($pokemon);
+            $pokemons[$index] = $this->loadExtraAttributes($pokemon);
         }
 
         return $this->render($pokemons);
@@ -141,7 +141,7 @@ class Pokemon extends Resource implements PokemonFacade
     private function loadExtraAttributes($pokemon)
     {
         if (isset($pokemon['evolutions'])) {
-            //$pokemon = $this->loadEvolutions($pokemon);
+            $pokemon = $this->loadEvolutions($pokemon);
         }
         if (isset($pokemon['type_id'])) {
             $pokemon = $this->loadType($pokemon);
@@ -162,10 +162,32 @@ class Pokemon extends Resource implements PokemonFacade
                 continue;
             }
             foreach ($evolution as $rankToLoad) {
-                $resultEvolution[$key][] = $this->loadByAttribute('rank', [
+                $evol = $this->loadByAttribute('rank', [
                     'rank' => $rankToLoad
                 ]);
+                if ($evol && is_array($evol)) {
+                    $evol = reset($evol);
+                }
+                $resultEvolution[$key][] = $evol;
             }
+        }
+        foreach ($resultEvolution as $key => $result) {
+            if(!is_array($result)) {
+                continue;
+            }
+            foreach ($result as $index => $tmpResult) {
+                if (isset($tmpResult['evolutions'])) {
+                    unset($tmpResult['evolutions']);
+                }
+                if (isset($tmpResult['type_id'])) {
+                    $type = $this->load((int)$tmpResult['type_id'], 'types');
+                    $labelType = isset($type['label']) ? $type['label'] : 'Undefined';
+                    $tmpResult['type_id'] = $labelType;
+                }
+                $result[$index] = $tmpResult;
+            }
+
+            $resultEvolution[$key] = $result;
         }
         $pokemon['evolutions'] = $resultEvolution;
 
