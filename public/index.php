@@ -36,8 +36,11 @@ if (file_exists(__DIR__ . '/../config/development.config.php')) {
     $appConfig = ArrayUtils::merge($appConfig, require __DIR__ . '/../config/development.config.php');
 }
 
+$serverHost = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+
 define("ROOT_PATH", dirname(__FILE__), true);
 define("DS", DIRECTORY_SEPARATOR);
+define("SERVER_HOST", $serverHost);
 
 // Run the application!
 Application::init($appConfig)->run();

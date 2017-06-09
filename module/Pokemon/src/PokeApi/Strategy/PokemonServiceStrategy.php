@@ -25,7 +25,10 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
 {
     /** @var Pokemon $resource */
     protected $resource;
-
+    /** @var string ICON_FOLDER */
+    const ICON_FOLDER = '/img/icon/';
+    /** @var string ICON_EXTENSION */
+    const ICON_EXTENSION = 'png';
     /**
      * PokemonServiceStrategy constructor.
      *
