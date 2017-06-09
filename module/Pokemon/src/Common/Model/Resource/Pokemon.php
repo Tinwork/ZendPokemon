@@ -31,7 +31,7 @@ class Pokemon extends Resource implements PokemonFacade
     /**
      * @inheritdoc
      */
-    public function save(array $data, string $path) : bool
+    public function save(array $data, string $path = null) : bool
     {
         $sql = new Sql($this->adapter);
         $insert = $sql->insert($this->table)
@@ -146,6 +146,9 @@ class Pokemon extends Resource implements PokemonFacade
         if (isset($pokemon['type_id'])) {
             $pokemon = $this->loadType($pokemon);
         }
+        if (array_key_exists('thumbnail', $pokemon) && isset($pokemon['thumbnail'])) {
+            $pokemon['thumbnail'] = $this->loadThumbnailPath($pokemon);
+        }
 
         return $pokemon;
     }
@@ -210,4 +213,16 @@ class Pokemon extends Resource implements PokemonFacade
 
         return $pokemon;
     }
+
+    /**
+     * Get thumbnail from pokemon
+     *
+     * @param array $pokemon
+     * @return null|string
+     */
+    private function loadThumbnailPath(array $pokemon)
+    {
+        return isset($pokemon['thumbnail']) ? SERVER_HOST . $pokemon['thumbnail'] : null;
+    }
+
 }
