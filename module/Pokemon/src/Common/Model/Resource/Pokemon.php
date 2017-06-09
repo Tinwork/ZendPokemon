@@ -172,7 +172,11 @@ class Pokemon extends Resource implements PokemonFacade
             }
         }
         foreach ($resultEvolution as $key => $result) {
-            if(!is_array($result)) {
+            if (!is_array($result)) {
+                continue;
+            }
+            if (sizeof(reset($result)) < 1) {
+                $resultEvolution[$key] = [];
                 continue;
             }
             foreach ($result as $index => $tmpResult) {
