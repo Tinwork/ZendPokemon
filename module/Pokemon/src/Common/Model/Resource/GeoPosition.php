@@ -13,6 +13,7 @@ namespace Pokemon\Common\Model\Resource;
 
 use Pokemon\Common\Model\Facade\GeoPositionFacade;
 use Pokemon\Common\Model\Resource\Resource;
+use Pokemon\PokeApi\Strategy\PokemonServiceStrategy as PokemonStrategy;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
@@ -81,9 +82,10 @@ class GeoPosition extends Resource implements GeoPositionFacade
                     continue;
                 }
                 $pokemonId = $row['pokemon_id'];
+                $pokemon = $this->load($pokemonId, 'pokemons');
                 $pokemonList['collection'][] = [
-                    'pokemon'   => $this->load($pokemonId, 'pokemons'),
-                    'icon'      => 'icone'
+                    'pokemon'   => $pokemon,
+                    'icon'      => $this->getIcon($pokemon)
                 ];
             }
 
@@ -140,5 +142,23 @@ class GeoPosition extends Resource implements GeoPositionFacade
         $res = $stmt->execute();
 
         return (int)$res->getAffectedRows() == 1 ? true : false;
+    }
+
+    /**
+     * Get pokemon icon
+     *
+     * @param array|null $pokemon
+     * @return null|string
+     */
+    private function getIcon(array $pokemon = null)
+    {
+        if (!$pokemon) {
+            return null;
+        }
+        $rank = $pokemon['rank'];
+        $iconPath = PokemonStrategy::ICON_FOLDER .  str_pad($rank, 3, 0, STR_PAD_LEFT) . '.' . PokemonStrategy::ICON_EXTENSION;
+        $absolutePath = ROOT_PATH . $iconPath;
+
+        return !file_exists($absolutePath) ? null : SERVER_HOST . $iconPath;
     }
 }
