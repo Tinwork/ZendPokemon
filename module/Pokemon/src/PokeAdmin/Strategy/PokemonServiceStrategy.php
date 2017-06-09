@@ -53,6 +53,10 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
         if ($this->verifyUniquesAttributes($this->model->getUniques(), $this->model, $dataToArray['body'])) {
             return $this->__r();
         }
+        if (!$this->verifyType($dataToArray['body'])) {
+            return $this->__r();
+        }
+        $dataToArray['body']['type'] = $this->formatArrayString($dataToArray['body']['type']);
         if (isset($dataToArray['body']['evolutions'])) {
             $dataToArray['body']['evolutions'] = $this->prepareEvolutions($dataToArray['body']['evolutions']);
         }
@@ -136,5 +140,31 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
         }
 
         return Zend_Json::encode($evolutions, true);
+    }
+
+    /**
+     * @param array $data
+     * @return bool
+     */
+    protected function verifyType(array $data) : bool
+    {
+        if (!isset($data['type'])) {
+            $this->addError(sprintf('No type ID defined in body data'));
+            return false;
+        }
+        $types = $data['type'];
+        if (!is_array($types)) {
+            $types = [$types];
+        }
+        foreach ($types as $type) {
+            $typeEntity = $this->model->load($type, 'types');
+            if ($typeEntity && is_array($typeEntity) && sizeof($typeEntity) >= 1) {
+                continue;
+            }
+            $this->addError(sprintf('The type id : %s doesnt exist', $type));
+            return false;
+        }
+
+        return true;
     }
 }
