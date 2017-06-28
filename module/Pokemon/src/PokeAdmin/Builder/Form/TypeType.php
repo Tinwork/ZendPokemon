@@ -24,9 +24,13 @@ class TypeType extends Form
         $this->setHydrator(new TypeHydrator());
 
         $label = new Element\Text('label');
+        $color = new Element\Text('color');
+        $badge = new Element\Text('badge');
         $submit = new Element\Submit('submit');
 
         $this->add($label);
+        $this->add($color);
+        $this->add($badge);
         $this->add($submit);
     }
 }

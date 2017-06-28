@@ -213,7 +213,9 @@ class Pokemon extends Resource implements PokemonFacade
                 continue;
             }
             $result[] = [
-                'label' => $typeEntity['label']
+                'label' => $typeEntity['label'],
+                'badge_path' => null,
+                'color' => null
             ];
         }
         if (sizeof($result) <= 1) {

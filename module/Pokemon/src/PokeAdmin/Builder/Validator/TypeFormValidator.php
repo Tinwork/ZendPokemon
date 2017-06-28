@@ -32,7 +32,15 @@ class TypeFormValidator extends InputFilter
         $label->setRequired(true);
         $label->setFilterChain($this->getStringTrimFilterChain());
 
+        $color = new Input('color');
+        $color->setRequired(true);
+
+        $badge = new Input('badge');
+        $badge->setRequired(true);
+
         $this->add($label);
+        $this->add($color);
+        $this->add($badge);
     }
 
     protected function getStringTrimFilterChain()
