@@ -82,8 +82,11 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
         }
         /** @var array $pokemon */
         $pokemon = Zend_Json::decode($data, true);
-        if (!isset($pokemon['body']) || !$this->model->update($pokemonId, $pokemon['body'])) {
+        $result = $this->model->update($pokemonId, $pokemon['body']);
+
+        if (!isset($pokemon['body']) || $result['error'] === true) {
             $this->addError(sprintf('An error when we process the update of pokemon ID : %s', $pokemonId));
+            $this->addError($result['message']);
             return $this->__r();
         }
 

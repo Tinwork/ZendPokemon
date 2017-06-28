@@ -11,6 +11,7 @@
  */
 namespace Pokemon\Common\Controller;
 
+use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json as Zend_Json;
@@ -19,6 +20,8 @@ class AbstractController extends AbstractActionController
 {
     /** @var string BODY_KEY */
     const BODY_KEY = "body";
+    /** @var string PATTERN_JSON_EXTRACT */
+    const PATTERN_JSON_EXTRACT = '/\{(?:[^{}]|(?R))*\}/i';
 
     /**
      * Pre-dispatch to good actions for REST routes
@@ -50,6 +53,12 @@ class AbstractController extends AbstractActionController
         return new JsonModel($params);
     }
 
+    /**
+     * Extract data
+     *
+     * @param string $data
+     * @return array
+     */
     protected function extractData(string $data)
     {
         try {
@@ -66,6 +75,12 @@ class AbstractController extends AbstractActionController
         return $data[self::BODY_KEY];
     }
 
+    /**
+     * Get form errors in case when hydrate entity
+     *
+     * @param $form
+     * @return array
+     */
     public function getFormErrors($form)
     {
         $errors = [];
@@ -75,5 +90,28 @@ class AbstractController extends AbstractActionController
         }
 
         return $errors;
+    }
+
+    /**
+     * Process body content and extract form data
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function processBodyContent(Request $request) : array
+    {
+        /** @var string|null $content */
+        $content = $request->getContent();
+        if (!$content) {
+            return [];
+        }
+        preg_match(self::PATTERN_JSON_EXTRACT, $content, $matches);
+        if (!$matches || !isset($matches[0])) {
+            return [];
+        }
+
+        return [
+            'data' => (string)$matches[0]
+        ];
     }
 }
