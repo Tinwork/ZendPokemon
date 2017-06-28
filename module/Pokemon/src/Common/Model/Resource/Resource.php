@@ -120,6 +120,28 @@ class Resource
     }
 
     /**
+     * Format array for update SQL request
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function formatUpdatedValue(array $data) : array
+    {
+        $updatedValue = [];
+        foreach ($data as $key => $row) {
+            $formattedValue = $row;
+            if ($key == 'evolutions') {
+                $formattedValue = Zend_Json::encode($row);
+            }
+            $updatedValue[] = [
+                $key => $formattedValue
+            ];
+        }
+
+        return $updatedValue;
+    }
+
+    /**
      * Check if attributes is save as JSON
      *
      * @param $string

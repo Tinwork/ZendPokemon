@@ -31,39 +31,57 @@ class Pokemon extends Resource implements PokemonFacade
     /**
      * @inheritdoc
      */
-    public function save(array $data, string $path = null) : bool
+    public function save(array $data, string $path = null) : array
     {
-        $sql = new Sql($this->adapter);
-        $insert = $sql->insert($this->table)
-            ->values([
-                'name'          => $data['name'],
-                'rank'          => $data['rank'],
-                'type_id'       => $data['type'],
-                'evolutions'    => $data['evolutions'],
-                'thumbnail'     => $path
-            ]);
+        try {
+            $sql = new Sql($this->adapter);
+            $insert = $sql->insert($this->table)
+                ->values([
+                    'name' => $data['name'],
+                    'rank' => $data['rank'],
+                    'type_id' => $data['type'],
+                    'evolutions' => $data['evolutions'],
+                    'thumbnail' => $path
+                ]);
 
-        $statement = $sql->prepareStatementForSqlObject($insert);
-        $statement->execute();
+            $statement = $sql->prepareStatementForSqlObject($insert);
+            $result  = $statement->execute();
 
-        return true;
+            return [
+                "value" => $result->getGeneratedValue()
+            ];
+        } catch (\Exception $e) {
+            return [
+                "error" => $e->getMessage()
+            ];
+        }
     }
 
     /**
      * @inheritdoc
      */
-    public function update(int $pokemonId, array $data): bool
+    public function update(int $pokemonId, array $data): array
     {
-        $sql = new Sql($this->adapter);
-        $update = $sql->update($this->table);
-        $where = new Where();
-        $where->equalTo('id', $pokemonId);
-        $update->set($data, $where);
+        try {
+            $updatedValue = $this->formatUpdatedValue($data);
+            $sql = new Sql($this->adapter);
+            $update = $sql->update($this->table);
+            $where = new Where();
+            $where->equalTo('id', $pokemonId);
+            foreach ($updatedValue as $updateRow) {
+                $update->set($updateRow);
+            }
+            $update->where($where);
+            $stmt = $sql->prepareStatementForSqlObject($update);
+            $stmt->execute();
 
-        $stmt = $sql->prepareStatementForSqlObject($update);
-        $result = $stmt->execute();
-
-        return $result->getAffectedRows() >= 1 ? true : false;
+            return ['error' => false];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 
     /**
@@ -213,9 +231,9 @@ class Pokemon extends Resource implements PokemonFacade
                 continue;
             }
             $result[] = [
-                'label' => $typeEntity['label'],
-                'badge_path' => null,
-                'color' => null
+                'label'         => $typeEntity['label'],
+                'badge_path'    => $typeEntity['badge_path'],
+                'color'         => $typeEntity['color']
             ];
         }
         if (sizeof($result) <= 1) {

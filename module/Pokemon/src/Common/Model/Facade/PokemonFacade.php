@@ -43,18 +43,18 @@ interface PokemonFacade extends RepositoryInterface
      *
      * @param array $data
      * @param string $path
-     * @return bool
+     * @return array
      */
-    public function save(array $data, string $path) : bool;
+    public function save(array $data, string $path) : array;
 
     /**
      * Update pokemon by id
      *
      * @param int $pokemonId
      * @param array $data
-     * @return bool
+     * @return array
      */
-    public function update(int $pokemonId, array $data) : bool;
+    public function update(int $pokemonId, array $data) : array;
 
     /**
      * Delete pokemon

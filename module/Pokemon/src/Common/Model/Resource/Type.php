@@ -122,8 +122,30 @@ class Type extends Resource implements TypeFacade
     /**
      * @inheritDoc
      */
-    public function update(int $typeId, array $data): bool
+    public function update(int $typeId, array $data): array
     {
+        try {
+            $updatedValue = $this->formatUpdatedValue($data);
+            $sql = new Sql($this->adapter);
+            $update = $sql->update($this->table);
+            $where = new Where();
+            $where->equalTo('id', $typeId);
+            foreach ($updatedValue as $updateRow) {
+                $update->set($updateRow);
+            }
+            $update->where($where);
+            $stmt = $sql->prepareStatementForSqlObject($update);
+            $stmt->execute();
+
+            return ['error' => false];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => $e->getMessage()
+            ];
+        }
+        var_dump($typeId);
+        var_dump($data);
         // TODO: Implement update() method.
     }
 
