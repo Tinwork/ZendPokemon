@@ -231,6 +231,16 @@ return [
                                     ],
                                 ]
                             ],
+                            'badges' => [
+                                'type' => Literal::class,
+                                'options' => [
+                                    'route' => '/badges',
+                                    'defaults' => [
+                                        'controller' => 'Pokemon\PokeApi\Controller\TypeController',
+                                        'action' => 'badge'
+                                    ]
+                                ]
+                            ],
                         ]
                     ],
                     'geo' => [

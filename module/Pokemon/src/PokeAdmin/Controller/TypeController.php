@@ -32,26 +32,6 @@ class TypeController extends AbstractController
     }
 
     /**
-     * Render all types
-     *
-     * @return \Zend\View\Model\JsonModel
-     */
-    public function show()
-    {
-        die('show');
-    }
-
-    /**
-     * Render type by id
-     *
-     * @return \Zend\View\Model\JsonModel
-     */
-    public function view()
-    {
-        die('view');
-    }
-
-    /**
      * Create new type
      *
      * @return \Zend\View\Model\JsonModel

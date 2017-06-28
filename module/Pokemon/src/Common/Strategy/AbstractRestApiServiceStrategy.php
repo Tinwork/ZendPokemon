@@ -135,6 +135,15 @@ class AbstractRestApiServiceStrategy
     }
 
     /**
+     * @param $data
+     * @return string
+     */
+    protected function formatArrayString($data)
+    {
+        return !is_array($data) ? $data : implode(',', $data);
+    }
+
+    /**
      * Add error
      *
      * @param string $message

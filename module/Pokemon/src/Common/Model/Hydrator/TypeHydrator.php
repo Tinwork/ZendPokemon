@@ -26,7 +26,9 @@ class TypeHydrator implements HydratorInterface
         }
 
         return [
-            'label' => $object->getLabel()
+            'label' => $object->getLabel(),
+            'color' => $object->getColor(),
+            'badge' => $object->getBadge()
         ];
     }
 
@@ -39,6 +41,8 @@ class TypeHydrator implements HydratorInterface
             return $object;
         }
         $object->setLabel(isset($data['label']) ? (string)($data['label']) : null);
+        $object->setColor(isset($data['color']) ? (string)($data['color']) : null);
+        $object->setBadge(isset($data['badge']) ? (string)($data['badge']) : null);
 
         return $object;
     }

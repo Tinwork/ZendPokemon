@@ -17,6 +17,10 @@ class Type
     protected $id;
     /** @var string $label */
     protected $label;
+    /** @var string $color */
+    protected $color;
+    /** @var string $badge */
+    protected $badge;
 
     /**
      * @return int
@@ -48,5 +52,37 @@ class Type
     public function setLabel(string $label)
     {
         $this->label = $label;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     */
+    public function setColor(string $color)
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBadge()
+    {
+        return $this->badge;
+    }
+
+    /**
+     * @param string $badge
+     */
+    public function setBadge(string $badge)
+    {
+        $this->badge = $badge;
     }
 }

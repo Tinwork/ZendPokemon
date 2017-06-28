@@ -23,6 +23,10 @@ use Pokemon\PokeApi\Controller\PokemonController;
 
 class TypeServiceStrategy extends AbstractRestApiServiceStrategy
 {
+    /** @var string PUBLIC_BADGE_SERVER_PATH */
+    const PUBLIC_BADGE_SERVER_PATH = DS . 'public' . DS . 'img' . DS . 'badges' . DS;
+    /** @var string PUBLIC_BADGE_DIRECTORY */
+    const PUBLIC_BADGE_DIRECTORY = DS . 'img' . DS . 'badges' . DS;
     /** @var Type $resource */
     protected $resource;
 
@@ -56,11 +60,50 @@ class TypeServiceStrategy extends AbstractRestApiServiceStrategy
      * @param array|null $queries
      * @return array
      */
-    public  function fetchPokemonsByType(int $typeId, array $queries = null) : array
+    public function fetchPokemonsByType(int $typeId, array $queries = null) : array
     {
         return $this->__r([
             'type' => $this->resource->load($typeId),
             'pokemons' => $this->resource->fetchPokemonsByType($typeId, $queries)
         ]);
+    }
+
+    /**
+     * Get all badges or associated badge by types
+     *
+     * @param array|null $types
+     * @return array
+     */
+    public function fetchBadgesType(array $types = null) : array
+    {
+        $badgeFolder = getcwd() . self::PUBLIC_BADGE_SERVER_PATH;
+        if (!is_dir($badgeFolder)) {
+            return [];
+        }
+        $files = array_diff(scandir($badgeFolder), ['.', '..']);
+        $result = [];
+        if ($types && is_array($types) && sizeof($types) > 1) {
+            foreach ($files as $file) {
+                preg_match('/^(?P<type>[a-zA-Z]+)\.?(?P<extension>png|jpg|gif)$/', $file, $matches);
+                if (!isset($matches['type']) || !in_array($matches['type'], $types)) {
+                    continue;
+                }
+                $pathFile = SERVER_HOST . self::PUBLIC_BADGE_DIRECTORY . $file;
+                $result[] = [
+                    $matches['type'] => $pathFile
+                ];
+            }
+
+            return $result;
+        }
+        foreach ($files as $file) {
+            preg_match('/^(?P<type>[a-zA-Z]+)\.?(?P<extension>png|jpg|gif)$/', $file, $matches);
+            $pathFile = SERVER_HOST . self::PUBLIC_BADGE_DIRECTORY . $file;
+            $result[] = [
+                $matches['type'] => $pathFile
+            ];
+        }
+
+        return $result;
     }
 }

@@ -38,6 +38,7 @@ class Pokemon extends Resource implements PokemonFacade
             ->values([
                 'name'          => $data['name'],
                 'rank'          => $data['rank'],
+                'type_id'       => $data['type'],
                 'evolutions'    => $data['evolutions'],
                 'thumbnail'     => $path
             ]);
@@ -141,10 +142,10 @@ class Pokemon extends Resource implements PokemonFacade
     private function loadExtraAttributes($pokemon)
     {
         if (isset($pokemon['evolutions'])) {
-            $pokemon = $this->loadEvolutions($pokemon);
+            $pokemon['evolutions'] = $this->loadEvolutions($pokemon);
         }
         if (isset($pokemon['type_id'])) {
-            $pokemon = $this->loadType($pokemon);
+            $pokemon['type_id'] = $this->loadType($pokemon);
         }
         if (array_key_exists('thumbnail', $pokemon) && isset($pokemon['thumbnail'])) {
             $pokemon['thumbnail'] = $this->loadThumbnailPath($pokemon);
@@ -187,18 +188,15 @@ class Pokemon extends Resource implements PokemonFacade
                     unset($tmpResult['evolutions']);
                 }
                 if (isset($tmpResult['type_id'])) {
-                    $type = $this->load((int)$tmpResult['type_id'], 'types');
-                    $labelType = isset($type['label']) ? $type['label'] : 'Undefined';
-                    $tmpResult['type_id'] = $labelType;
+                    $tmpResult['type_id'] = $this->loadType($tmpResult);
                 }
                 $result[$index] = $tmpResult;
             }
 
             $resultEvolution[$key] = $result;
         }
-        $pokemon['evolutions'] = $resultEvolution;
 
-        return $pokemon;
+        return $resultEvolution;
     }
 
     private function loadType($pokemon)
@@ -207,11 +205,24 @@ class Pokemon extends Resource implements PokemonFacade
             return $pokemon;
         }
         $pokemonTypeId = $pokemon['type_id'];
-        $type = $this->load($pokemonTypeId, 'types');
-        $labelType = isset($type['label']) ? $type['label'] : 'Undefined';
-        $pokemon['type_id'] = $labelType;
+        $types = explode(',', $pokemonTypeId);
+        $result = [];
+        foreach ($types as $type) {
+            $typeEntity = $this->load($type, 'types');
+            if (!$typeEntity) {
+                continue;
+            }
+            $result[] = [
+                'label' => $typeEntity['label'],
+                'badge_path' => null,
+                'color' => null
+            ];
+        }
+        if (sizeof($result) <= 1) {
+            $result = reset($result);
+        }
 
-        return $pokemon;
+        return $result;
     }
 
     /**

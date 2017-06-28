@@ -29,6 +29,9 @@ class TypeController extends AbstractController
         $this->strategy = $strategy;
     }
 
+    /**
+     * @return \Zend\View\Model\JsonModel
+     */
     public function showAction()
     {
         $typeId = $this->params()->fromRoute('id');
@@ -39,6 +42,24 @@ class TypeController extends AbstractController
         ]);
     }
 
+    /**
+     * Get all badges from server
+     */
+    public function badgeAction()
+    {
+        $queryParams = $this->getRequest()->getQuery('q');
+        $queryParams = explode(',', $queryParams);
+
+        $collection = $this->strategy->fetchBadgesType($queryParams);
+
+        return $this->renderJson([
+            'collection' => $collection
+        ]);
+    }
+
+    /**
+     * @return \Zend\View\Model\JsonModel
+     */
     public function getPokemonAction()
     {
         $queryParams = $this->getRequest()->getQuery('query');
