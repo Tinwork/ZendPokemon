@@ -63,17 +63,7 @@ class Pokemon extends Resource implements PokemonFacade
     public function update(int $pokemonId, array $data): array
     {
         try {
-            $updatedValue = [];
-            foreach ($data as $key => $row) {
-                $formattedValue = $row;
-                if ($key == 'evolutions') {
-                    $formattedValue = Zend_Json::encode($row);
-                }
-                $updatedValue[] = [
-                    $key => $formattedValue
-                ];
-            }
-
+            $updatedValue = $this->formatUpdatedValue($data);
             $sql = new Sql($this->adapter);
             $update = $sql->update($this->table);
             $where = new Where();

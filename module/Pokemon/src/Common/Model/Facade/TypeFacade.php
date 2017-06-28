@@ -61,9 +61,9 @@ interface TypeFacade extends RepositoryInterface
      *
      * @param int $typeId
      * @param array $data
-     * @return bool
+     * @return array
      */
-    public function update(int $typeId, array $data) : bool;
+    public function update(int $typeId, array $data) : array;
 
     /**
      * Delete type by id

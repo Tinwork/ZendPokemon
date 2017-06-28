@@ -66,7 +66,14 @@ class TypeController extends AbstractController
      */
     public function update()
     {
-        die('update');
+        /** @var int $typeId */
+        $typeId = $this->params()->fromRoute('id');
+        /** @var array $data */
+        $data = $this->processBodyContent($this->getRequest());
+        /** @var array $response */
+        $response = $this->typeService->update($typeId, $data['data']);
+
+        return $this->renderJson($response);
     }
 
     /**

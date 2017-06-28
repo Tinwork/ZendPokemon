@@ -64,7 +64,21 @@ class TypeServiceStrategy extends AbstractRestApiServiceStrategy
      */
     public function update(int $typeId, string $data) : array
     {
-        return [];
+        if (!$typeId || !$data) {
+            $this->addError('No ID or data informed for the PATCH/PUT request');
+            return $this->__r();
+        }
+        /** @var array $type */
+        $type = Zend_Json::decode($data, true);
+        $result = $this->model->update($typeId, $type['body']);
+
+        if (!isset($type['body']) || $result['error'] === true) {
+            $this->addError(sprintf('An error when we process the PATCH request of ID : %s', $typeId));
+            $this->addError($result['message']);
+            return $this->__r();
+        }
+
+        return $this->__r();
     }
 
     /**
