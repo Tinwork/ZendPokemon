@@ -100,18 +100,29 @@ class AbstractController extends AbstractActionController
      */
     public function processBodyContent(Request $request) : array
     {
-        /** @var string|null $content */
-        $content = $request->getContent();
-        if (!$content) {
-            return [];
-        }
-        preg_match(self::PATTERN_JSON_EXTRACT, $content, $matches);
-        if (!$matches || !isset($matches[0])) {
-            return [];
-        }
+        try {
+            /** @var string|null $content */
+            $content = $request->getContent();
+            if (!$content) {
+                return [];
+            }
+            preg_match(self::PATTERN_JSON_EXTRACT, $content, $matches);
+            if (!$matches || !isset($matches[0]) || !$this->isJson($matches[0])) {
+                return [];
+            }
 
-        return [
-            'data' => (string)$matches[0]
-        ];
+            return [ 'data' => (string)$matches[0] ];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * @param $string
+     * @return bool
+     */
+    private function isJson($string) {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
     }
 }
