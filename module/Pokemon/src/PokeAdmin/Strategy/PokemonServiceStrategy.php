@@ -71,12 +71,12 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
      * Update pokemon by id
      *
      * @param int $pokemonId
-     * @param string $data
+     * @param array $data
      * @return array
      */
-    public function update(int $pokemonId, string $data) : array
+    public function update(int $pokemonId, array $data) : array
     {
-        if (!$pokemonId || !$data) {
+        if (!$pokemonId || !$data || sizeof($data) < 1) {
             $this->addError('No ID or data informed for the updating request');
             return $this->__r();
         }

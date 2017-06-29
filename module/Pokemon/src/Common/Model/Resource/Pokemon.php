@@ -208,6 +208,9 @@ class Pokemon extends Resource implements PokemonFacade
                 if (isset($tmpResult['type_id'])) {
                     $tmpResult['type_id'] = $this->loadType($tmpResult);
                 }
+                if (array_key_exists('thumbnail', $tmpResult) && isset($tmpResult['thumbnail'])) {
+                    $tmpResult['thumbnail'] = $this->loadThumbnailPath($pokemon);
+                }
                 $result[$index] = $tmpResult;
             }
 
@@ -235,9 +238,6 @@ class Pokemon extends Resource implements PokemonFacade
                 'badge_path'    => $typeEntity['badge_path'],
                 'color'         => $typeEntity['color']
             ];
-        }
-        if (sizeof($result) <= 1) {
-            $result = reset($result);
         }
 
         return $result;
