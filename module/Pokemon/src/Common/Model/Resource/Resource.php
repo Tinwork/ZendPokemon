@@ -24,6 +24,8 @@ class Resource
     protected $table = "table";
     /** @var array $fillables */
     protected $fillables = [];
+    /** @var array $attributes */
+    protected $attributes = [];
     /** @var array $uniques */
     protected $uniques = [];
 
@@ -129,6 +131,9 @@ class Resource
     {
         $updatedValue = [];
         foreach ($data as $key => $row) {
+            if (!in_array($key, $this->attributes)) {
+                continue;
+            }
             $formattedValue = $row;
             if ($key == 'evolutions') {
                 $formattedValue = Zend_Json::encode($row);

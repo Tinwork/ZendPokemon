@@ -84,8 +84,10 @@ class GeoPosition extends Resource implements GeoPositionFacade
                 $pokemonId = $row['pokemon_id'];
                 $pokemon = $this->load($pokemonId, 'pokemons');
                 $pokemonList['collection'][] = [
-                    'pokemon'   => $pokemon,
-                    'icon'      => $this->getIcon($pokemon)
+                    'pokemon'   => [
+                        'icon'      => $this->getIcon($pokemon),
+                        'position'  => $this->getPosition($pokemon)
+                    ]
                 ];
             }
 
@@ -160,5 +162,34 @@ class GeoPosition extends Resource implements GeoPositionFacade
         $absolutePath = ROOT_PATH . $iconPath;
 
         return !file_exists($absolutePath) ? null : SERVER_HOST . $iconPath;
+    }
+
+    /**
+     * Get long/lat from pokemon
+     *
+     * @param array $pokemon
+     * @return array
+     */
+    private function getPosition(array $pokemon) : array
+    {
+        if (!$pokemon || !isset($pokemon['id'])) {
+            return [];
+        }
+        $pokemonId = $pokemon['id'];
+        try {
+            $sql = new Sql($this->adapter);
+            $select = $sql->select($this->table);
+            $where = new Where();
+            $where->equalTo('pokemon_id', $pokemonId);
+            $select->columns(['*'])
+                ->where($where);
+
+            $stmt = $sql->prepareStatementForSqlObject($select);
+            $result = $stmt->execute();
+
+            return $this->render($result->getResource()->fetch());
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }
