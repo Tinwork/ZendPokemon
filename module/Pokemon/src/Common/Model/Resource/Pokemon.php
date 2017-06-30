@@ -25,6 +25,8 @@ class Pokemon extends Resource implements PokemonFacade
     protected $table = "pokemons";
     /** @var array $fillables */
     protected $fillables = ["name", "rank"];
+    /** @var array $attributes */
+    protected $attributes = ['name', 'rank', 'evolutions', 'type_id', 'thumbnail'];
     /** @var array $uniques */
     protected $uniques = ["name", "rank"];
 

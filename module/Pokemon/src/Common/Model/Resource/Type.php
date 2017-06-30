@@ -24,6 +24,8 @@ class Type extends Resource implements TypeFacade
     protected $table = "types";
     /** @var array $fillables */
     protected $fillables = ["label", "color"];
+    /** @var array $attributes */
+    protected $attributes = ['name', 'rank', 'evolutions', 'type_id', 'thumbnail'];
     /** @var array $uniques */
     protected $uniques = ["label"];
 

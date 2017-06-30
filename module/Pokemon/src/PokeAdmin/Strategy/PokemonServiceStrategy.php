@@ -80,10 +80,9 @@ class PokemonServiceStrategy extends AbstractRestApiServiceStrategy
             $this->addError('No ID or data informed for the updating request');
             return $this->__r();
         }
-        /** @var array $pokemon */
-        $pokemon = Zend_Json::decode($data, true);
+        /** @var array $pokemon */;
+        $pokemon = Zend_Json::decode($data['data'], true);
         $result = $this->model->update($pokemonId, $pokemon['body']);
-
         if (!isset($pokemon['body']) || $result['error'] === true) {
             $this->addError(sprintf('An error when we process the update of pokemon ID : %s', $pokemonId));
             $this->addError($result['message']);

@@ -47,6 +47,20 @@ class UploadServiceStrategy
 
         return $uploadPath;
     }
+
+    /**
+     * @param array $file
+     * @return array
+     */
+    public function convert(array $file)
+    {
+        if (!isset($file['data'])) {
+            return [];
+        }
+        var_dump("test");
+        die;
+    }
+
     /**
      * Check extension of the upload file
      *

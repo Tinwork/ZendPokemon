@@ -88,9 +88,13 @@ class RestPokemonController extends AbstractController
         /** @var int $pokemonId */
         $pokemonId = $this->params()->fromRoute('id');
         /** @var array $data */
-        $data = $this->processBodyContent($this->getRequest());
+        $data = $this->processBodyContent($this->getRequest(), self::EXTRACT_JSON);
+        $base64 = $this->processBodyContent($this->getRequest(), self::EXTRACT_BASE64);
         /** @var array $response */
         $response = $this->strategy->update($pokemonId, $data);
+        if (isset($response['code']) && $response['code'] === 200) {
+
+        }
 
         return $this->renderJson($response);
     }

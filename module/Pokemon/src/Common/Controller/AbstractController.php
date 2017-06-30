@@ -22,6 +22,12 @@ class AbstractController extends AbstractActionController
     const BODY_KEY = "body";
     /** @var string PATTERN_JSON_EXTRACT */
     const PATTERN_JSON_EXTRACT = '/\{(?:[^{}]|(?R))*\}/i';
+    /** @var string PATTERN_BASE64_EXTRACT */
+    const PATTERN_BASE64_EXTRACT = '/(?P<base64>data.*base64.*[?=|-])/i';
+    /** @var string EXTRACT_JSON */
+    const EXTRACT_JSON = "JSON";
+    /** @var string EXTRACT_BASE64 */
+    const EXTRACT_BASE64 = "BASE64";
 
     /**
      * Pre-dispatch to good actions for REST routes
@@ -96,9 +102,10 @@ class AbstractController extends AbstractActionController
      * Process body content and extract form data
      *
      * @param Request $request
+     * @param string $type
      * @return array
      */
-    public function processBodyContent(Request $request) : array
+    public function processBodyContent(Request $request, string $type = self::PATTERN_JSON_EXTRACT) : array
     {
         try {
             /** @var string|null $content */
@@ -106,11 +113,25 @@ class AbstractController extends AbstractActionController
             if (!$content) {
                 return [];
             }
-            preg_match(self::PATTERN_JSON_EXTRACT, $content, $matches);
-            if (!$matches || !isset($matches[0]) || !$this->isJson($matches[0])) {
+            file_put_contents('text.txt', $content);
+            switch ($type) {
+                case self::EXTRACT_BASE64 :
+                    $pattern = self::PATTERN_BASE64_EXTRACT;
+                    break;
+                default:
+                    $pattern = self::PATTERN_JSON_EXTRACT;
+                    break;
+            }
+            preg_match($pattern, $content, $matches);
+            if (!$matches || !isset($matches[0])) {
                 return [];
             }
-
+            if ($type == self::EXTRACT_BASE64) {
+                return [ 'data' => (string)$matches[0] ];
+            }
+            if (!$this->isJson($matches[0])) {
+                return [];
+            }
             return [ 'data' => (string)$matches[0] ];
         } catch (\Exception $e) {
             return [];
