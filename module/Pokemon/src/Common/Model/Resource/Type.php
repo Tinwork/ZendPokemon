@@ -25,7 +25,7 @@ class Type extends Resource implements TypeFacade
     /** @var array $fillables */
     protected $fillables = ["label", "color"];
     /** @var array $attributes */
-    protected $attributes = ['name', 'rank', 'evolutions', 'type_id', 'thumbnail'];
+    protected $attributes = ['label', 'color', 'badge_path'];
     /** @var array $uniques */
     protected $uniques = ["label"];
 
@@ -146,9 +146,6 @@ class Type extends Resource implements TypeFacade
                 'message' => $e->getMessage()
             ];
         }
-        var_dump($typeId);
-        var_dump($data);
-        // TODO: Implement update() method.
     }
 
     /**
