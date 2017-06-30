@@ -83,10 +83,11 @@ class GeoPosition extends Resource implements GeoPositionFacade
                 }
                 $pokemonId = $row['pokemon_id'];
                 $pokemon = $this->load($pokemonId, 'pokemons');
-                $pokemonList['collection'][] = [
+                $position = $this->getPosition($pokemon);
+                $pokemonList['collection']['pokemon_' . $pokemonId] = [
                     'pokemon'   => [
                         'icon'      => $this->getIcon($pokemon),
-                        'position'  => $this->getPosition($pokemon)
+                        'position'  => $position
                     ]
                 ];
             }
@@ -181,13 +182,13 @@ class GeoPosition extends Resource implements GeoPositionFacade
             $select = $sql->select($this->table);
             $where = new Where();
             $where->equalTo('pokemon_id', $pokemonId);
-            $select->columns(['*'])
+            $select->columns(['longitude', 'latitude'])
                 ->where($where);
 
             $stmt = $sql->prepareStatementForSqlObject($select);
             $result = $stmt->execute();
 
-            return $this->render($result->getResource()->fetch());
+            return $this->render($result->getResource()->fetchAll());
         } catch (\Exception $e) {
             return [];
         }
