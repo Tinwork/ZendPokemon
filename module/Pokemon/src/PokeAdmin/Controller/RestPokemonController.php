@@ -96,13 +96,15 @@ class RestPokemonController extends AbstractController
         $responseFilePatch = [];
         if (isset($response['code']) && $response['code'] === 200) {
             $data = $this->extractData($data['data']);
-            $patch = [
-                'data' => Zend_Json::encode(['body' => [
+            if ($this->upload->validPatchUploadFile($base64, $data)) {
+                $patch = [
+                    'data' => Zend_Json::encode(['body' => [
                         'thumbnail' => $this->upload->convert($base64, $data)
                     ]
-                ])
-            ];
-            $responseFilePatch = $this->strategy->update($pokemonId, $patch);
+                    ])
+                ];
+                $responseFilePatch = $this->strategy->update($pokemonId, $patch);
+            }
         }
 
         return $this->renderJson(array_merge($response, $responseFilePatch));

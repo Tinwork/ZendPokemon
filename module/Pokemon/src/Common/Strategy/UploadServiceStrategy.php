@@ -78,6 +78,30 @@ class UploadServiceStrategy
     }
 
     /**
+     * @param array $base64
+     * @param array $file
+     * @return bool
+     */
+    public function validPatchUploadFile(array $base64, array $file) : bool
+    {
+        if (!isset($base64['data']) || !isset($file['file']) || !isset($file['file']['name']) || !isset($file['file']['extension'])) {
+            return false;
+        }
+        $extension = $file['file']['extension'];
+        preg_match('/image\/(?P<extension>\w+)/i', $base64['data'], $matches);
+        if (
+            !isset($file['file']['name']) ||
+            !in_array($extension, self::FILE_ALLOWED_EXTENSION) ||
+            !isset($matches['extension']) ||
+            !in_array($matches['extension'], self::FILE_ALLOWED_EXTENSION)
+        ) {
+          return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param string|null $base64
      * @return string
      */
