@@ -49,16 +49,44 @@ class UploadServiceStrategy
     }
 
     /**
+     * @param array $base64
      * @param array $file
-     * @return array
+     * @return string
      */
-    public function convert(array $file)
+    public function convert(array $base64, array $file) : string
     {
-        if (!isset($file['data'])) {
-            return [];
+        if (!isset($base64['data']) || !isset($file['file']) || !isset($file['file']['name']) || !isset($file['file']['extension'])) {
+            return null;
         }
-        var_dump("test");
-        die;
+        try {
+            $base64decode = $this->_decodeBase64($base64['data']);
+            $file = $file['file']['name'] . '.' . $file['file']['extension'];
+            /** @var string $path */
+            $path = $this->_getUploadPath();
+            $serverPath = ROOT_PATH . $path;
+            /** @var string $newPath */
+            $newPath = ROOT_PATH . $path . DS . $file;
+            if (!is_dir($serverPath)) {
+                $this->_createUploadDirectory($serverPath);
+            }
+            file_put_contents($newPath, $base64decode);
+
+            return $path . DS . $file;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param string|null $base64
+     * @return string
+     */
+    protected function _decodeBase64(string $base64 = null) : string
+    {
+        list($type, $data) = explode(';', $base64);
+        list(, $data)      = explode(',', $data);
+
+        return base64_decode($data);
     }
 
     /**
@@ -156,6 +184,6 @@ class UploadServiceStrategy
     {
         /** @var DateTime $now */
         $now = new DateTime();
-        return $now->format('Ydm');
+        return $now->format('Ymd');
     }
 }
