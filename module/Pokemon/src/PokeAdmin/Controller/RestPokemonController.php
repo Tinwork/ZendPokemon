@@ -18,6 +18,7 @@ use Pokemon\PokeAdmin\Builder\Validator\PokemonFormValidator;
 use Pokemon\PokeAdmin\Strategy\PokemonServiceStrategy;
 use Pokemon\Common\Controller\AbstractController;
 use Zend\View\Model\JsonModel;
+use Zend\Json\Json as Zend_Json;
 
 class RestPokemonController extends AbstractController
 {
@@ -92,11 +93,21 @@ class RestPokemonController extends AbstractController
         $base64 = $this->processBodyContent($this->getRequest(), self::EXTRACT_BASE64);
         /** @var array $response */
         $response = $this->strategy->update($pokemonId, $data);
+        $responseFilePatch = [];
         if (isset($response['code']) && $response['code'] === 200) {
-
+            $data = $this->extractData($data['data']);
+            if ($this->upload->validPatchUploadFile($base64, $data)) {
+                $patch = [
+                    'data' => Zend_Json::encode(['body' => [
+                        'thumbnail' => $this->upload->convert($base64, $data)
+                    ]
+                    ])
+                ];
+                $responseFilePatch = $this->strategy->update($pokemonId, $patch);
+            }
         }
 
-        return $this->renderJson($response);
+        return $this->renderJson(array_merge($response, $responseFilePatch));
     }
 
     /**

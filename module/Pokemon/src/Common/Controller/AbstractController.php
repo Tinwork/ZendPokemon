@@ -113,7 +113,6 @@ class AbstractController extends AbstractActionController
             if (!$content) {
                 return [];
             }
-            file_put_contents('text.txt', $content);
             switch ($type) {
                 case self::EXTRACT_BASE64 :
                     $pattern = self::PATTERN_BASE64_EXTRACT;

@@ -49,16 +49,68 @@ class UploadServiceStrategy
     }
 
     /**
+     * @param array $base64
      * @param array $file
-     * @return array
+     * @return string
      */
-    public function convert(array $file)
+    public function convert(array $base64, array $file) : string
     {
-        if (!isset($file['data'])) {
-            return [];
+        if (!isset($base64['data']) || !isset($file['file']) || !isset($file['file']['name']) || !isset($file['file']['extension'])) {
+            return null;
         }
-        var_dump("test");
-        die;
+        try {
+            $base64decode = $this->_decodeBase64($base64['data']);
+            $file = $file['file']['name'] . '.' . $file['file']['extension'];
+            /** @var string $path */
+            $path = $this->_getUploadPath();
+            $serverPath = ROOT_PATH . $path;
+            /** @var string $newPath */
+            $newPath = ROOT_PATH . $path . DS . $file;
+            if (!is_dir($serverPath)) {
+                $this->_createUploadDirectory($serverPath);
+            }
+            file_put_contents($newPath, $base64decode);
+
+            return $path . DS . $file;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param array $base64
+     * @param array $file
+     * @return bool
+     */
+    public function validPatchUploadFile(array $base64, array $file) : bool
+    {
+        if (!isset($base64['data']) || !isset($file['file']) || !isset($file['file']['name']) || !isset($file['file']['extension'])) {
+            return false;
+        }
+        $extension = $file['file']['extension'];
+        preg_match('/image\/(?P<extension>\w+)/i', $base64['data'], $matches);
+        if (
+            !isset($file['file']['name']) ||
+            !in_array($extension, self::FILE_ALLOWED_EXTENSION) ||
+            !isset($matches['extension']) ||
+            !in_array($matches['extension'], self::FILE_ALLOWED_EXTENSION)
+        ) {
+          return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string|null $base64
+     * @return string
+     */
+    protected function _decodeBase64(string $base64 = null) : string
+    {
+        list($type, $data) = explode(';', $base64);
+        list(, $data)      = explode(',', $data);
+
+        return base64_decode($data);
     }
 
     /**
@@ -156,6 +208,6 @@ class UploadServiceStrategy
     {
         /** @var DateTime $now */
         $now = new DateTime();
-        return $now->format('Ydm');
+        return $now->format('Ymd');
     }
 }
