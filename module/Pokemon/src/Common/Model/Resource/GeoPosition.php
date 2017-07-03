@@ -63,8 +63,18 @@ class GeoPosition extends Resource implements GeoPositionFacade
         try {
             $sql = new Sql($this->adapter);
             $where = new Where();
-            $where->between('longitude', $longitude - $rayon - 0.0001, $longitude + $rayon + 0.0001);
-            $where->between('latitude', $latitude - $rayon - 0.0001, $latitude + $rayon + 0.0001);
+            $longMin = (float)$longitude - (float)$rayon - 0.0001;
+            $longMax = (float)$longitude + (float)$rayon + 0.0001;
+            $latMin = (float)$latitude - (float)$rayon - 0.0001;
+            $latMax = (float)$latitude + (float)$rayon + 0.0001;
+            if ($longMin <= 0) {
+                $longMin = 0;
+            }
+            if ($latMin <= 0) {
+                $latMin = 0;
+            }
+            $where->between('longitude', $longMin, $longMax);
+            $where->between('latitude', $latMin, $latMax);
             if ($pokemonId) {
                 $where->equalTo('pokemon_id', $pokemonId);
             }
@@ -74,7 +84,6 @@ class GeoPosition extends Resource implements GeoPositionFacade
 
             $stmt = $sql->prepareStatementForSqlObject($select);
             $result = $stmt->execute();
-
             $rows = $result->getResource()->fetchAll();
             $pokemonList['result'] = $result->getAffectedRows();
             foreach ($rows as $row) {
