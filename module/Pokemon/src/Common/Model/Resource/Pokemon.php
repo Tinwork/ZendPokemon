@@ -211,7 +211,7 @@ class Pokemon extends Resource implements PokemonFacade
                     $tmpResult['type_id'] = $this->loadType($tmpResult);
                 }
                 if (array_key_exists('thumbnail', $tmpResult) && isset($tmpResult['thumbnail'])) {
-                    $tmpResult['thumbnail'] = $this->loadThumbnailPath($pokemon);
+                    $tmpResult['thumbnail'] = $this->loadThumbnailPath($tmpResult);
                 }
                 $result[$index] = $tmpResult;
             }
