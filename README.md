@@ -8,9 +8,9 @@
 * **URL Params** : None
 * **Data Params** : None
 * **Success Response:** 
-   * **Content:** `{"collection":{"code":200,"response":{"pokemons":[...]}}}`
+   * **Content:** `{ "collection" : { "code" : 200, "response" : { "pokemons" : [...] }}}`
 * **Error Response:** 
-   * **Content:** `{"collection":{"code":500 }`
+   * **Content:** `{ "collection" : { "code" : 500 }`
 * **Sample Call:** None
   
 ### Get pokemon
@@ -44,9 +44,9 @@
     }
     ```
 * **Success Response:**
-    **Content:** `{"collection":{"code" : 200 }`
+    **Content:** `{ "collection" : { "code" : 200 }`
 * **Error Response:**
-    **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+    **Content:** `{ "collection" : { "code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
 ### Edit pokemon
@@ -62,13 +62,111 @@
     }
     ```
 * **Success Response:**
+    **Content:** `{ "collection" : { "code" : 200 }`
+* **Error Response:**
+    **Content:** `{ "collection" : { "code" : 500, "errors" : [ ... ] }`
+* **Sample Call:** None
+
+### Delete a pokemon
+* **URL** : /admin/pokemons/:id?token={{token}}
+* **Method:** DELETE
+* **URL Params** : `id=[integer]`
+* **Data Params** : None
+* **Success Response:**
+    **Content:** `{ "collection" : { "code" : 200 }`
+* **Error Response:**
+    **Content:** `{ "collection" : { "code" : 500, "errors" : [ ... ] }`
+* **Sample Call:** None
+
+## Types
+### Get all types
+
+* **URL:** /api/types
+* **Method:** GET
+* **URL Params** : None
+* **Data Params** : None
+* **Success Response:** 
+   * **Content:** `{ "collection" : { "code" : 200, "response" : { "types" : [...] }}}`
+* **Error Response:** 
+   * **Content:** `{ "collection" : { "code" : 500 }`
+* **Sample Call:** None
+  
+### Get all types badges
+
+* **URL:** /api/types/badges
+* **Method:** GET
+* **URL Params** : None
+* **Data Params** : None
+* **Success Response:** 
+   * **Content:** `{ "collection" : {"code" : 200, "response": [...] }}`
+* **Error Response:** 
+   * **Content:** `{ "collection" : {"code" : 500 }`
+* **Sample Call:** None
+  
+### Get type 
+
+* **URL** : /api/types/:id
+* **Method:** GET
+* **URL Params** : `id=[integer]`
+* **Data Params** : None
+* **Success Response:**
+   * **Content:** `{ "collection" : {"code" : 200, "response" : { "types" : [...] }}}`
+* **Error Response:**
+   * **Content:** `{ "collection" : {"code" : 500 }`
+* **Sample Call:** None
+ 
+### Get pokemons from type 
+
+* **URL** : /api/types/:id/pokemons
+* **Method:** GET
+* **URL Params** : `id=[integer]`
+* **Data Params** : None
+* **Success Response:**
+   * **Content:** `{ "collection" : { "code" : 200, "response" : { "type" : [], "pokemons" : [] }}}`
+* **Error Response:**
+   * **Content:** `{ "collection" : { "code" : 500 }`
+* **Sample Call:** None
+ 
+### Save new types
+* **URL** : /admin/types?token={{token}}
+* **Method:** POST
+* **URL Params** : None
+* **Data Params** : 
+    ```json
+    {
+      "body": {
+        "label": "Poison",
+        "color" : "#B55AA5",
+        "badge" : "http://52.208.132.215/img/badges/poison.png"
+      }
+    }
+    ```
+* **Success Response:**
     **Content:** `{"collection":{"code" : 200 }`
 * **Error Response:**
     **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
-### Delete a pokemon
-* **URL** : /admin/pokemons/:id?token={{token}}
+### Edit types
+* **URL** : /admin/types/:id?token={{token}}
+* **Method:** PUT | UPDATE
+* **URL Params** : `id=[integer]`
+* **Data Params** : 
+    ```json
+    {
+      "body": {
+          "label": "Planteuh"	
+        }
+    }
+    ```
+* **Success Response:**
+    **Content:** `{"collection":{"code" : 200 }`
+* **Error Response:**
+    **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+* **Sample Call:** None
+
+### Delete a type
+* **URL** : /admin/types/:id?token={{token}}
 * **Method:** DELETE
 * **URL Params** : `id=[integer]`
 * **Data Params** : None
@@ -78,7 +176,5 @@
     **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
-
-## Types
 ## Pokemon Geo
 ## Admins
