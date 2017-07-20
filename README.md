@@ -8,9 +8,9 @@
 * **URL Params** : None
 * **Data Params** : None
 * **Success Response:** 
-    **Content:** `{"collection":{"code":200,"response":{"pokemons":[...]}}}`
+   * **Content:** `{"collection":{"code":200,"response":{"pokemons":[...]}}}`
 * **Error Response:** 
-    **Content:** `{"collection":{"code":500 }`
+   * **Content:** `{"collection":{"code":500 }`
 * **Sample Call:** None
   
 ### Get pokemon
@@ -20,9 +20,9 @@
 * **URL Params** : `id=[integer]`
 * **Data Params** : None
 * **Success Response:**
-    **Content:** `{ "collection" : {"code" : 200, "response" : { "pokemons" : [...] }}}`
+   * **Content:** `{ "collection" : {"code" : 200, "response" : { "pokemons" : [...] }}}`
 * **Error Response:**
-    **Content:** `{ "collection" : {"code" : 500 }`
+   * **Content:** `{ "collection" : {"code" : 500 }`
 * **Sample Call:** None
  
 ### Save new pokemon
@@ -49,6 +49,36 @@
     **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
-##Types
-##Pokemon Geo
-##Admins
+### Edit pokemon
+* **URL** : /admin/pokemons/:id?token={{token}}
+* **Method:** PUT | UPDATE
+* **URL Params** : `id=[integer]`
+* **Data Params** : 
+    ```json
+    {
+      "body": {
+        "name": "Bulbi"
+      }
+    }
+    ```
+* **Success Response:**
+    **Content:** `{"collection":{"code" : 200 }`
+* **Error Response:**
+    **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+* **Sample Call:** None
+
+### Delete a pokemon
+* **URL** : /admin/pokemons/:id?token={{token}}
+* **Method:** DELETE
+* **URL Params** : `id=[integer]`
+* **Data Params** : None
+* **Success Response:**
+    **Content:** `{"collection":{"code" : 200 }`
+* **Error Response:**
+    **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+* **Sample Call:** None
+
+
+## Types
+## Pokemon Geo
+## Admins
