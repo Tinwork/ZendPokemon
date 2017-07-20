@@ -43,26 +43,6 @@ return [
                     ]
                 ],
             ],
-            'pokedoc' => [
-                    'type' => Literal::class,
-                    'options' => [
-                        'route' => '/api/documentation',
-                        'defaults' => [
-                            'controller' => 'Pokemon\PokeDoc\Controller\IndexController',
-                            'action' => 'doc'
-                        ]
-                    ]
-            ],
-            'pokecontact' => [
-                'type' => Literal::class,
-                'options' => [
-                    'route' => '/contact',
-                    'defaults' => [
-                        'controller' => 'Pokemon\PokeDoc\Controller\IndexController',
-                        'action' => 'contact'
-                    ]
-                ]
-            ],
             'admin' => [
                 'type' => Literal::class,
                 'options' => [
