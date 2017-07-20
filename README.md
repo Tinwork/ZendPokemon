@@ -2,8 +2,7 @@
 
 ## Pokemons 
 ### Get all pokemons
-----
-Returns json data about all pokemons.
+
 * **URL:** /api/pokemons
 * **Method:** GET
 * **URL Params** : None
