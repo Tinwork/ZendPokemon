@@ -44,9 +44,9 @@
     }
     ```
 * **Success Response:**
-    **Content:** `{ "collection" : { "code" : 200 }`
+  * **Content:** `{ "collection" : { "code" : 200 }`
 * **Error Response:**
-    **Content:** `{ "collection" : { "code" : 500, "errors" : [ ... ] }`
+  * **Content:** `{ "collection" : { "code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
 ### Edit pokemon
@@ -62,9 +62,9 @@
     }
     ```
 * **Success Response:**
-    **Content:** `{ "collection" : { "code" : 200 }`
+  * **Content:** `{ "collection" : { "code" : 200 }`
 * **Error Response:**
-    **Content:** `{ "collection" : { "code" : 500, "errors" : [ ... ] }`
+  * **Content:** `{ "collection" : { "code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
 ### Delete a pokemon
@@ -73,9 +73,9 @@
 * **URL Params** : `id=[integer]`
 * **Data Params** : None
 * **Success Response:**
-    **Content:** `{ "collection" : { "code" : 200 }`
+  * **Content:** `{ "collection" : { "code" : 200 }`
 * **Error Response:**
-    **Content:** `{ "collection" : { "code" : 500, "errors" : [ ... ] }`
+  * **Content:** `{ "collection" : { "code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
 ## Types
@@ -142,9 +142,9 @@
     }
     ```
 * **Success Response:**
-    **Content:** `{"collection":{"code" : 200 }`
+  * **Content:** `{"collection":{"code" : 200 }`
 * **Error Response:**
-    **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+  * **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
 ### Edit types
@@ -160,9 +160,9 @@
     }
     ```
 * **Success Response:**
-    **Content:** `{"collection":{"code" : 200 }`
+  * **Content:** `{"collection":{"code" : 200 }`
 * **Error Response:**
-    **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+  * **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
 ### Delete a type
@@ -171,14 +171,14 @@
 * **URL Params** : `id=[integer]`
 * **Data Params** : None
 * **Success Response:**
-    **Content:** `{"collection":{"code" : 200 }`
+  * **Content:** `{"collection":{"code" : 200 }`
 * **Error Response:**
-    **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+  * **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
 ## Pokemon Geo
 ### Get all pokemons positions
-* **URL** : /api/geo/pokemons
+* **URL** : /api/geo/pokemons?long=11&lat=11&r=2
 * **Method:** GET
 * **URL Params** : 
   * `long=[float]` 
@@ -204,6 +204,56 @@
    ```
 * **Error Response:**
    * **Content:** `{ "collection" : { "code" : 500 }`
+* **Sample Call:** None
+
+### Get pokemon position
+* **URL** : /api/geo/pokemons/:id?long=11&lat=11&r=2
+* **Method:** GET
+* **URL Params** : 
+  * `id=[integer]` 
+  * `long=[float]` 
+  * `lat=[float]` 
+  * `r=[integer]`
+* **Data Params** : None
+* **Success Response:**
+   * **Content:** 
+   ```json
+   {
+      "code": 200,
+      "response": {
+          "result": {
+              "radar": {
+                  "longitude": 48.8246,
+                  "latitude": 2.56619
+              },
+              "result": 3,
+              "collection": [ ... ]
+          }
+      }
+    }
+   ```
+* **Error Response:**
+   * **Content:** `{ "collection" : { "code" : 500 }`
+* **Sample Call:** None
+
+
+### Get all pokemons positions
+* **URL** : /api/geo/pokemons/:id
+* **Method:** POST
+* **URL Params** : `id=[integer]`
+* **Data Params** : 
+   ```json
+   {
+     "body": {
+        "longitude": 35.323,
+        "latitude" : 42.233
+     }
+   }
+   ```
+* **Success Response:**
+  * **Content:** `{"collection":{"code" : 200 }`
+* **Error Response:**
+  * **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
 * **Sample Call:** None
 
 ## Admins
