@@ -7,25 +7,48 @@
 * **Method:** GET
 * **URL Params** : None
 * **Data Params** : None
-* **Success Response:** `{"collection":{"code":200,"response":{"pokemons":[...]}}}`
-* **Error Response:** `{"collection":{"code":500 }`
+* **Success Response:** 
+    **Content:** `{"collection":{"code":200,"response":{"pokemons":[...]}}}`
+* **Error Response:** 
+    **Content:** `{"collection":{"code":500 }`
 * **Sample Call:** None
   
-  
 ### Get pokemon
-Returns json data about one pokemon.
+
 * **URL** : /api/pokemons/:id
 * **Method:** GET
 * **URL Params** : `id=[integer]`
 * **Data Params** : None
 * **Success Response:**
-    **Content:** `{"collection":{"code":200,"response":{"pokemons":[...]}}}`
+    **Content:** `{ "collection" : {"code" : 200, "response" : { "pokemons" : [...] }}}`
 * **Error Response:**
-    **Content:** `{"collection":{"code":500 }`
+    **Content:** `{ "collection" : {"code" : 500 }`
 * **Sample Call:** None
  
- 
-###Save new pokemon
+### Save new pokemon
+* **URL** : /admin/pokemons?token={{token}}
+* **Method:** POST
+* **URL Params** : None
+* **Data Params** : 
+    ```json
+    {
+      "body": {
+        "name": "Bulbizarre",
+        "type": [type_id_1, type_id_2],
+        "rank": 1,
+        "evolutions": {
+          "sub_evolution": null,
+          "post_evolution": [2, 3]
+        }
+      }
+    }
+    ```
+* **Success Response:**
+    **Content:** `{"collection":{"code" : 200 }`
+* **Error Response:**
+    **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+* **Sample Call:** None
+
 ##Types
 ##Pokemon Geo
 ##Admins
