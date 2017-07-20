@@ -177,4 +177,33 @@
 * **Sample Call:** None
 
 ## Pokemon Geo
+### Get all pokemons positions
+* **URL** : /api/geo/pokemons
+* **Method:** GET
+* **URL Params** : 
+  * `long=[float]` 
+  * `lat=[float]` 
+  * `r=[integer]`
+* **Data Params** : None
+* **Success Response:**
+   * **Content:** 
+   ```json
+   {
+      "code": 200,
+      "response": {
+          "result": {
+              "radar": {
+                  "longitude": 48.8246,
+                  "latitude": 2.56619
+              },
+              "result": 3,
+              "collection": [ ... ]
+          }
+      }
+    }
+   ```
+* **Error Response:**
+   * **Content:** `{ "collection" : { "code" : 500 }`
+* **Sample Call:** None
+
 ## Admins
