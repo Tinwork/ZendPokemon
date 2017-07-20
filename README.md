@@ -1,8 +1,21 @@
 # Tinwork API Pokemon
 
+## Access Token
+### Get token
+* **URL:** /admin/oauth
+* **Method:** POST
+* **URL Params** : None
+* **Data Params** : 
+  * [username] : root
+  * [password] : root
+* **Success Response:** 
+   * **Content:** `{ "collection" : { "code" : 200, "response" : { "token" : "token" }}}`
+* **Error Response:** 
+   * **Content:** `{ "collection" : { "code" : 500 }`
+* **Sample Call:** None
+
 ## Pokemons 
 ### Get all pokemons
-
 * **URL:** /api/pokemons
 * **Method:** GET
 * **URL Params** : None
@@ -14,7 +27,6 @@
 * **Sample Call:** None
   
 ### Get pokemon
-
 * **URL** : /api/pokemons/:id
 * **Method:** GET
 * **URL Params** : `id=[integer]`
@@ -28,7 +40,7 @@
 ### Save new pokemon
 * **URL** : /admin/pokemons?token={{token}}
 * **Method:** POST
-* **URL Params** : None
+* **URL Params** : `token=[string]`
 * **Data Params** : 
     ```json
     {
@@ -52,7 +64,9 @@
 ### Edit pokemon
 * **URL** : /admin/pokemons/:id?token={{token}}
 * **Method:** PUT | UPDATE
-* **URL Params** : `id=[integer]`
+* **URL Params** :
+  * `id=[integer]`
+  * `token=[string]`
 * **Data Params** : 
     ```json
     {
@@ -70,7 +84,9 @@
 ### Delete a pokemon
 * **URL** : /admin/pokemons/:id?token={{token}}
 * **Method:** DELETE
-* **URL Params** : `id=[integer]`
+* **URL Params** :
+  * `id=[integer]`
+  * `token=[string]`
 * **Data Params** : None
 * **Success Response:**
   * **Content:** `{ "collection" : { "code" : 200 }`
@@ -130,7 +146,7 @@
 ### Save new types
 * **URL** : /admin/types?token={{token}}
 * **Method:** POST
-* **URL Params** : None
+* **URL Params** : `token=[string]`
 * **Data Params** : 
     ```json
     {
@@ -150,7 +166,9 @@
 ### Edit types
 * **URL** : /admin/types/:id?token={{token}}
 * **Method:** PUT | UPDATE
-* **URL Params** : `id=[integer]`
+* **URL Params** :
+  * `id=[integer]`
+  * `token=[string]`
 * **Data Params** : 
     ```json
     {
@@ -168,7 +186,9 @@
 ### Delete a type
 * **URL** : /admin/types/:id?token={{token}}
 * **Method:** DELETE
-* **URL Params** : `id=[integer]`
+* **URL Params** : 
+  * `id=[integer]`
+  * `token=[string]`
 * **Data Params** : None
 * **Success Response:**
   * **Content:** `{"collection":{"code" : 200 }`
@@ -236,8 +256,7 @@
    * **Content:** `{ "collection" : { "code" : 500 }`
 * **Sample Call:** None
 
-
-### Get all pokemons positions
+### Add new position to a pokemon
 * **URL** : /api/geo/pokemons/:id
 * **Method:** POST
 * **URL Params** : `id=[integer]`
@@ -257,3 +276,35 @@
 * **Sample Call:** None
 
 ## Admins
+### Add new admin
+* **URL** : /admin?token=:token
+* **Method:** POST
+* **URL Params** : `token=[string]`
+* **Data Params** : 
+   ```json
+   {
+      "body": {
+        "pseudo": "root",
+        "password": "root",
+        "roles" : ["SUPER"]
+      }
+    }
+   ```
+* **Success Response:**
+  * **Content:** `{"collection":{"code" : 200 }`
+* **Error Response:**
+  * **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+* **Sample Call:** None
+
+### Delete admin
+* **URL** : /admin/:id?token=:token
+* **Method:** POST
+* **URL Params** : 
+  * `id=[integer]` 
+  * `token=[string]`
+* **Data Params** : None 
+* **Success Response:**
+  * **Content:** `{"collection":{"code" : 200 }`
+* **Error Response:**
+  * **Content:** `{"collection":{"code" : 500, "errors" : [ ... ] }`
+* **Sample Call:** None
